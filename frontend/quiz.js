@@ -535,7 +535,7 @@ async function saveQuizResult(quizTopic, score, totalQuestions) {
 
     try {
         const response = await fetch(
-            "http://localhost:3000/api/quiz/complete",
+            "/api/quiz/complete",
             {
                 method: "POST",
 

@@ -540,7 +540,7 @@ completeLessonBtn.addEventListener(
         try {
 
             const response = await fetch(
-                "http://localhost:3000/api/user/progress/lesson-complete",
+                "/api/user/progress/lesson-complete",
                 {
                     method: "POST",
 

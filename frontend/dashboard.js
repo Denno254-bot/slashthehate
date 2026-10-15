@@ -90,7 +90,7 @@ function startDashboard() {
 async function loadUserProgress(userId) {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/user/progress/${userId}`,
+            `/api/user/progress/${userId}`,
             {
                 method: "GET",
                 headers: {

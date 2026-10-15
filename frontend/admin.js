@@ -101,7 +101,7 @@ async function loadAdminDashboard() {
 
 async function loadAdminStats() {
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/stats"
+        "/api/admin/stats"
     );
 
     document.getElementById("totalUsers").textContent =
@@ -149,7 +149,7 @@ async function loadAdminUsers() {
     table.replaceChildren();
 
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/users"
+        "/api/admin/users"
     );
 
     if (!data.users || data.users.length === 0) {
@@ -183,7 +183,7 @@ async function loadAdminReports() {
     table.replaceChildren();
 
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/reports"
+        "/api/admin/reports"
     );
 
     if (!data.reports || data.reports.length === 0) {
@@ -252,7 +252,7 @@ async function loadAdminReports() {
 
             try {
                 const result = await adminFetch(
-                    `http://localhost:3000/api/admin/reports/${report.id}/status`,
+                    `/api/admin/reports/${report.id}/status`,
                     {
                         method: "PATCH",
                         body: JSON.stringify({
