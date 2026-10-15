@@ -1,0 +1,22 @@
+
+# Private configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Private backups and local database files
+*.sqlite
+*.sqlite3
+*.db
