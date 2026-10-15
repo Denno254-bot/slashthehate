@@ -1,0 +1,21 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary and backup files
+*.save
+*.bak
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db

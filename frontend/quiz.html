@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz | Slash the Hate</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <a href="homepage.html" class="logo">
+            SLASH<span>THE HATE</span>
+        </a>
+
+        <div class="menu-container">
+            <button class="menu-button" id="menuButton"
+                aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="side-menu" id="sideMenu">
+                <div class="menu-header">
+                    <h2>MENU</h2>
+                    <button class="close-menu" id="closeMenu">×</button>
+                </div>
+
+                <div class="menu-links">
+                    <a href="homepage.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="learn.html">Learn</a>
+                    <a href="quiz.html">Quiz</a>
+                    <a href="report.html">Report</a>
+                    <a href="tools.html">Tools</a>
+                    <a href="resources.html">Resources</a>
+                    
+                    <a href="community.html">Our Community</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Quiz Page -->
+    <main class="quiz-page">
+
+        <!-- Hero -->
+        <section class="quiz-hero">
+            <span class="section-label">TEST YOUR KNOWLEDGE</span>
+
+            <h1>Challenge your <span>knowledge.</span></h1>
+
+            <p>
+                Take a quiz, test what you have learned and discover
+                how much you know about creating a safer digital space.
+            </p>
+        </section>
+
+        <!-- Quiz Topics -->
+        <section class="quiz-section">
+
+            <div class="quiz-section-heading">
+                <h2>Choose a quiz topic</h2>
+                <p>Select a topic to begin your learning challenge.</p>
+            </div>
+
+            <div class="quiz-grid">
+
+                <!-- Quiz 1 -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">✊</div>
+                    <span class="quiz-number">QUIZ 01</span>
+                    <h3>Hate Speech</h3>
+                    <p>
+                        Test your understanding of hate speech,
+                        its effects and how to recognize it online.
+                    </p>
+                    <div class="quiz-info">
+                        <span>Multiple choice</span>
+                        <span>5 Questions</span>
+                    </div>
+                    <button class="quiz-start-btn"
+                        data-quiz="hate-speech">
+                        Start Quiz →
+                    </button>
+                </div>
+
+                <!-- Quiz 2 -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">🛡️</div>
+                    <span class="quiz-number">QUIZ 02</span>
+                    <h3>Cyberbullying</h3>
+                    <p>
+                        Learn to identify cyberbullying,
+                        its consequences and possible responses.
+                    </p>
+                    <div class="quiz-info">
+                        <span>Multiple choice</span>
+                        <span>5 Questions</span>
+                    </div>
+                    <button class="quiz-start-btn"
+                        data-quiz="cyberbullying">
+                        Start Quiz →
+                    </button>
+                </div>
+
+                <!-- Quiz 3 -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">🤝</div>
+                    <span class="quiz-number">QUIZ 03</span>
+                    <h3>Digital Respect</h3>
+                    <p>
+                        Explore respectful communication,
+                        empathy and responsible online behavior.
+                    </p>
+                    <div class="quiz-info">
+                        <span>Multiple choice</span>
+                        <span>5 Questions</span>
+                    </div>
+                    <button class="quiz-start-btn"
+                        data-quiz="digital-respect">
+                        Start Quiz →
+                    </button>
+                </div>
+
+                <!-- Quiz 4 -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">💬</div>
+                    <span class="quiz-number">QUIZ 04</span>
+                    <h3>Online Harassment</h3>
+                    <p>
+                        Understand online harassment,
+                        personal boundaries and reporting options.
+                    </p>
+                    <div class="quiz-info">
+                        <span>Multiple choice</span>
+                        <span>5 Questions</span>
+                    </div>
+                    <button class="quiz-start-btn"
+                        data-quiz="harassment">
+                        Start Quiz →
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Quiz Area: We'll make this interactive in Step 2 -->
+        <section class="quiz-area" id="quizArea">
+            <div class="quiz-placeholder">
+                <span>📝</span>
+                <h2>Your quiz will appear here</h2>
+                <p>
+                    Choose a quiz topic above to get ready
+                    for your knowledge challenge.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Slash the Hate. Promoting respect in the digital world.</p>
+    </footer>
+
+    <script src="menu.js"></script>
+<script src="quiz.js"></script>
+</body>
+</html>

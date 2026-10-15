@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Slash the Hate</title>
+    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<div id="adminSection" style="display: none;">
+    <a href="admin.html">Admin Panel</a>
+</div>
+
+    <header class="admin-header">
+        <a href="homepage.html" class="admin-logo">
+            SLASH <span>THE HATE</span>
+        </a>
+
+        <div class="admin-header-right">
+            <span id="adminName">Administrator</span>
+            <button id="adminLogout" type="button">Logout</button>
+        </div>
+    </header>
+
+    <main class="admin-container">
+
+        <section class="admin-welcome">
+            <p>ADMINISTRATION</p>
+            <h1>Admin Dashboard</h1>
+            <p>Manage users, monitor activities and review reports.</p>
+        </section>
+
+        <section class="admin-stats">
+            <article class="admin-stat">
+                <span>Registered Users</span>
+                <strong id="totalUsers">0</strong>
+            </article>
+
+            <article class="admin-stat">
+                <span>Lessons Completed</span>
+                <strong id="totalLessons">0</strong>
+            </article>
+
+            <article class="admin-stat">
+                <span>Quizzes Completed</span>
+                <strong id="totalQuizzes">0</strong>
+            </article>
+
+            <article class="admin-stat">
+                <span>Reports Submitted</span>
+                <strong id="totalReports">0</strong>
+            </article>
+        </section>
+
+        <section class="admin-section">
+            <h2>Registered Users</h2>
+            <p>Accounts registered on Slash the Hate.</p>
+
+            <div class="admin-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Date Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr>
+                            <td colspan="6">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2>Submitted Reports</h2>
+            <p>Review reported content and update its status.</p>
+
+            <div class="admin-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Reporter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Platform</th>
+                            <th>Content URL</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsTable">
+                        <tr>
+                            <td colspan="8">Loading reports...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <p id="adminMessage" role="status" aria-live="polite"></p>
+
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

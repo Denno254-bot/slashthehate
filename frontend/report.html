@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Report | Slash the Hate</title>
+
+    <link
+        rel="stylesheet"
+        href="homepage.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVIGATION BAR
+    ========================== -->
+
+    
+    <header class="navbar">
+
+    <!-- LOGO — stays on the left -->
+    <a href="homepage.html" class="logo">
+        SLASH<span>THE HATE</span>
+    </a>
+
+
+    <!-- HAMBURGER — stays on the right -->
+    <div class="menu-container">
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open navigation menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+
+        <!-- RIGHT SIDE MENU -->
+        <nav class="side-menu" id="sideMenu">
+
+            <div class="menu-header">
+
+                <h2>
+                    MENU
+                </h2>
+
+                <button
+                    class="close-menu"
+                    id="closeMenu"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="menu-links">
+
+                <a href="homepage.html">
+                    Home
+                </a>
+
+                <a href="about.html">
+                    About
+
+                <a href="learn.html">
+                    Learn
+                </a>
+
+
+                <a href="tools.html">
+                    Tools
+                </a>
+
+                <a href="resources.html">
+                    Resources
+                </a>
+
+                
+                <a href="community.html">
+                    Our Community
+                </a>
+
+            </div>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<main class="report-page">
+
+    <section class="report-hero">
+
+        <span class="section-label">
+            REPORT HARMFUL CONTENT
+        </span>
+
+        <h1>
+            Speak up against
+            <span>online hate.</span>
+        </h1>
+
+        <p>
+            If you encounter cyberbullying, hate speech,
+            harassment or other harmful online behavior,
+            you can report it here.
+        </p>
+
+    </section>
+
+
+    <section class="report-form-section">
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <span class="report-step">
+                    STEP 01
+                </span>
+
+                <h2>
+                    What are you reporting?
+                </h2>
+
+                <p>
+                    Select the type of harmful behavior
+                    you encountered.
+                </p>
+
+            </div>
+
+
+            <!-- REPORT TYPE -->
+
+            <div class="report-options">
+
+                <label class="report-option">
+
+                    <input
+                        type="radio"
+                        name="reportType"
+                        value="Hate Speech"
+                        required
+                    >
+
+                    <span class="option-content">
+
+                        <strong>
+                            Hate Speech
+                        </strong>
+
+                        <small>
+                            Attacks or hostility toward
+                            a person or group.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="report-option">
+
+                    <input
+                        type="radio"
+                        name="reportType"
+                        value="Cyberbullying"
+                    >
+
+                    <span class="option-content">
+
+                        <strong>
+                            Cyberbullying
+                        </strong>
+
+                        <small>
+                            Repeated harmful behavior
+                            directed at someone online.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="report-option">
+
+                    <input
+                        type="radio"
+                        name="reportType"
+                        value="Online Harassment"
+                    >
+
+                    <span class="option-content">
+
+                        <strong>
+                            Online Harassment
+                        </strong>
+
+                        <small>
+                            Unwanted or intimidating
+                            online behavior.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="report-option">
+
+                    <input
+                        type="radio"
+                        name="reportType"
+                        value="Bodyshaming"
+                    >
+
+                    <span class="option-content">
+
+                        <strong>
+                            Bodyshaming
+                        </strong>
+
+                        <small>
+                            Harmful comments targeting
+                            someone's appearance.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="report-field">
+
+                <label for="reportDescription">
+                    What happened?
+                </label>
+
+                <textarea
+                    id="reportDescription"
+                    placeholder="Describe what happened..."
+                    rows="6"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- PLATFORM -->
+
+            <div class="report-field">
+
+                <label for="reportPlatform">
+                    Where did it happen?
+                </label>
+
+                <select
+                    id="reportPlatform"
+                    required
+                >
+
+                    <option value="">
+                        Select platform
+                    </option>
+
+                    <option value="Facebook">
+                        Facebook
+                    </option>
+
+                    <option value="Instagram">
+                        Instagram
+                    </option>
+
+                    <option value="TikTok">
+                        TikTok
+                    </option>
+
+                    <option value="X">
+                        X
+                    </option>
+
+                    <option value="WhatsApp">
+                        WhatsApp
+                    </option>
+
+                    <option value="YouTube">
+                        YouTube
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- URL -->
+
+            <div class="report-field">
+
+                <label for="reportUrl">
+                    Link to the content
+                    <span>(optional)</span>
+                </label>
+
+                <input
+                    type="url"
+                    id="reportUrl"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="button"
+                id="submitReport"
+                class="report-submit"
+            >
+                Submit Report →
+            </button>
+
+
+            <p
+                id="reportMessage"
+                class="report-message"
+            ></p>
+
+        </div>
+
+    </section>
+
+</main>
+
+</section>
+
+
+
+    <!-- =================================
+         REPORTING PRINCIPLES
+    ================================== -->
+
+    <section class="report-principles">
+
+        <div class="report-principles-container">
+
+            <span class="section-label">
+                RESPONSIBLE REPORTING
+            </span>
+
+
+            <h2>
+                Report with
+                <span>purpose.</span>
+            </h2>
+
+
+            <div class="report-principles-grid">
+
+
+                <div>
+
+                    <strong>
+                        01
+                    </strong>
+
+                    <h3>
+                        Be truthful
+                    </h3>
+
+                    <p>
+                        Provide information based on
+                        what you actually observed.
+                    </p>
+
+                </div>
+
+
+
+                <div>
+
+                    <strong>
+                        02
+                    </strong>
+
+                    <h3>
+                        Be specific
+                    </h3>
+
+                    <p>
+                        Clear descriptions make it easier
+                        to understand the situation.
+                    </p>
+
+                </div>
+
+
+
+                <div>
+
+                    <strong>
+                        03
+                    </strong>
+
+                    <h3>
+                        Stay safe
+                    </h3>
+
+                    <p>
+                        Avoid actions that could place
+                        you or another person at risk.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         FOOTER
+    ================================== -->
+
+    <footer class="footer">
+
+        <div class="logo">
+
+            <span>SLASH</span>
+            <span class="the">THE</span>
+            <span>HATE</span>
+
+        </div>
+
+
+        <p>
+            Educate. Respect. Connect.
+            Make the digital world better.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="homepage.html">
+                Home
+            </a>
+
+            <a href="learn.html">
+                Learn
+            </a>
+
+            <a href="tools.html">
+                Tools
+            </a>
+
+            <a href="report.html">
+                Report
+            </a>
+
+            <a href="resources.html">
+                Resources
+            </a>
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="community.html">
+                Community
+            </a>
+
+        </div>
+
+
+        <p class="copyright">
+            © 2026 Slash the Hate.
+            All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script src="report.js"></script>
+     <script src="menu.js"></script>
+
+</body>
+
+</html>
