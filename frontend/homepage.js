@@ -75,8 +75,7 @@ async function analyzeMessage() {
     // =====================================
     // DISABLE BUTTON WHILE AI IS WORKING
     // =====================================
-
-    checkButton.disabled = true;
+  checkButton.disabled = true;
     checkButton.textContent = "Analyzing...";
 
     try {
@@ -85,9 +84,9 @@ async function analyzeMessage() {
         // SEND MESSAGE TO BACKEND
         // =====================================
 
-        const response = await fetch(
-            "http://localhost:3000/api/analyze-post",
-            {
+           const response = await fetch(
+    "http://localhost:3000/api/analyze-post",
+                  {
                 method: "POST",
 
                 headers: {

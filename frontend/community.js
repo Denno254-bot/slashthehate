@@ -214,7 +214,7 @@ if (discussionForm) {
 
                 const response =
                     await fetch(
-                        "http://localhost:3000/api/community/discussions",
+                        "/api/community/discussions",
                         {
                             method: "POST",
 
@@ -359,7 +359,7 @@ async function loadDiscussions() {
 
         const response =
             await fetch(
-                "http://localhost:3000/api/community/discussions"
+                "/api/community/discussions"
             );
 
 
@@ -671,7 +671,7 @@ async function openSingleDiscussion(
 
         const discussionResponse =
     await fetch(
-        `http://localhost:3000/api/community/discussions/${discussionId}`
+        `/api/community/discussions/${discussionId}`
     );
 
 const responseText =
@@ -771,7 +771,7 @@ try {
 
         const repliesResponse =
             await fetch(
-                `http://localhost:3000/api/community/discussions/${discussionId}/replies`
+                `/api/community/discussions/${discussionId}/replies`
             );
 
 
@@ -1038,7 +1038,7 @@ if (replyForm) {
 
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/community/discussions/${discussionId}/replies`,
+                        `/api/community/discussions/${discussionId}/replies`,
                         {
 
                             method: "POST",

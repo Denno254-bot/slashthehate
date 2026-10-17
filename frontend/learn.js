@@ -1,609 +1,430 @@
 
 /* =========================================
-   SLASH THE HATE
-   LEARN PAGE
+   SLASH THE HATE — LEARN PAGE
+   Lesson modals, videos and progress tracking
 ========================================= */
 
+document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
 
-/* =========================================
-   GET HTML ELEMENTS
-========================================= */
+    /* =========================================
+       GET HTML ELEMENTS
+    ========================================= */
 
-const learnButtons =
-    document.querySelectorAll(".learn-more");
+    const learnButtons = document.querySelectorAll(".learn-more");
 
-const learningModal =
-    document.getElementById("learningModal");
+    const learningModal = document.getElementById("learningModal");
+    const closeModal = document.getElementById("closeModal");
 
-const closeModal =
-    document.getElementById("closeModal");
+    const modalNumber = document.getElementById("modalNumber");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDefinition = document.getElementById("modalDefinition");
 
+    const modalExamples = document.getElementById("modalExamples");
+    const modalSigns = document.getElementById("modalSigns");
 
-const modalNumber =
-    document.getElementById("modalNumber");
+    const modalAction = document.getElementById("modalAction");
+    const modalTakeaway = document.getElementById("modalTakeaway");
 
-const modalTitle =
-    document.getElementById("modalTitle");
+    const modalVideo = document.getElementById("modalVideo");
+    const modalVideoSource = document.getElementById("modalVideoSource");
 
-const modalDefinition =
-    document.getElementById("modalDefinition");
+    const completeLessonBtn = document.getElementById("completeLessonBtn");
+    const completionMessage = document.getElementById("completionMessage");
 
-const modalExamples =
-    document.getElementById("modalExamples");
+    let currentTopic = null;
+    let isSavingProgress = false;
 
-const modalSigns =
-    document.getElementById("modalSigns");
+    /* =========================================
+       CHECK REQUIRED HTML ELEMENTS
+    ========================================= */
 
-const modalAction =
-    document.getElementById("modalAction");
-
-const modalTakeaway =
-    document.getElementById("modalTakeaway");
-
-    const modalVideo =
-    document.getElementById("modalVideo");
-
-const modalVideoSource =
-    document.getElementById("modalVideoSource");
-
-
-
-    const completeLessonBtn =
-    document.getElementById("completeLessonBtn");
-   
-
-
-const completionMessage =
-    document.getElementById("completionMessage");
-
-let currentTopic = null;
-/* =========================================
-   LEARNING CONTENT
-========================================= */
-
-const topics = {
-
-    /* =====================================
-       CYBERBULLYING
-    ====================================== */
-
-    "cyberbullying": {
-
-        number: "02",
-
-        title: "Cyberbullying",
-        video: "videos/cyberbullying.mp4",
-
-        definition:
-            "Cyberbullying involves using digital communication or online platforms to repeatedly hurt, intimidate, embarrass or target another person. Unlike traditional bullying, online bullying can reach a person even when they are at home. Insults, threats, embarrassing posts, spreading rumors, sharing private information, impersonation, or deliberately excluding someone. Something typed as a joke can seriously affect another person's emotions and wellbeing.",
-
-        examples: [
-
-            "Repeatedly sending insulting messages",
-
-            "Posting humiliating content about someone",
-
-            "Creating accounts to mock or target another person",
-
-            "Encouraging others to attack someone online"
-
-        ],
-
-        signs: [
-
-            "Repeated personal attacks",
-
-            "Humiliating posts or comments",
-
-            "Coordinated attacks from multiple accounts",
-
-            "Someone being deliberately excluded or targeted"
-
-        ],
-
-        action:
-            "Do not join the attack. Save evidence, block or mute the person when appropriate, report harmful content and seek help from someone you trust.",
-
-        takeaway:
-            "A screen does not remove the impact of your words."
-
-    },
-
-
-    /* =====================================
-       HATE SPEECH
-    ====================================== */
-
-    "hate-speech": {
-
-        number: "01",
-
-        title: "Hate Speech",
-
-        definition:
-            "Hate speech generally refers to communication that attacks, dehumanizes or promotes hostility toward people or groups because of characteristics such as identity or background. t can appear in social media posts, comments, videos, messages, livestreams, memes, and online discussions. People can have different opinions without attacking or degrading others. Hate speech can lead to fear, discrimination, exclusion, conflict, and sometimes violence.",
-
-        examples: [
-
-            "Attacking people because of their identity",
-
-            "Using dehumanizing language toward a group",
-
-            "Encouraging hostility against a group",
-
-            "Spreading messages that portray a group as inferior"
-
-        ],
-
-        signs: [
-
-            "Targeting an entire group",
-
-            "Dehumanizing language",
-
-            "Calls for hostility or exclusion",
-
-            "Attacks based on identity rather than conduct"
-
-        ],
-
-        action:
-            "Do not amplify harmful content. Consider reporting it through the platform's reporting system and avoid responding with more hateful language.",
-
-        takeaway:
-            "Disagreement does not require dehumanizing another person."
-
-    },
-
-
-    /* =====================================
-       HARASSMENT
-    ====================================== */
-
-    "harassment": {
-
-        number: "03",
-
-        title: "Online Harassment",
-
-        definition:
-            "Online harassment involves unwanted, hostile or abusive behavior directed toward someone through digital platforms. Repeated unwanted messages, threats, insults, stalking, sexual harassment, impersonation, or coordinated attacks. Harassment can happen through private messages, emails, gaming chats, or other digital communication. Continuously contacting someone after they have clearly asked you to stop is not respectful behavior.",
-
-        examples: [
-
-            "Repeated unwanted messages",
-
-            "Targeted insults or intimidation",
-
-            "Persistent unwanted contact",
-
-            "Encouraging others to attack an individual"
-
-        ],
-
-        signs: [
-
-            "The behavior continues after someone asks it to stop",
-
-            "Repeated unwanted contact",
-
-            "Personal attacks rather than discussion",
-
-            "Attempts to intimidate or humiliate"
-
-        ],
-
-        action:
-            "Avoid escalating the situation. Use privacy controls, block or mute the account, keep evidence where necessary and report serious or persistent abuse.",
-
-        takeaway:
-            "You can disagree with someone without making them your target."
-
-    },
-      
-    /*=========================================
-           ONLINE BODYSHAMING
-        ========================================*/
-
-    "online-bodyshaming": {
-
-    number: "04",
-
-    title: "Online Bodyshaming",
-
-    definition:
-        "Online bodyshaming involves mocking, insulting or humiliating someone because of their physical appearance, body, size or disability. People can be body-shamed because of their weight, height, skin, hair, facial features, body shape, disability, or other aspects of their appearance. Comments, memes, edited photos, videos, posts, private messages, and even 'jokes' can be used to shame someone. Calling something a joke does not automatically make it harmless, especially when the target is embarrassed or hurt.",
-
-    examples: [
-
-        "Making insulting comments about someone's appearance",
-
-        "Sharing embarrassing images of someone to mock them",
-
-        "Making jokes about someone's body or disability",
-
-        "Encouraging others to ridicule someone's appearance"
-
-    ],
-
-    signs: [
-
-        "Repeated comments about someone's appearance",
-
-        "Public humiliation or mocking",
-
-        "Insults focused on body or physical characteristics",
-
-        "Sharing images to embarrass someone"
-
-    ],
-
-    action:
-        "Do not participate in appearance-based attacks. Avoid sharing humiliating content, report abusive behavior when appropriate and support the person being targeted.",
-
-    takeaway:
-        "A person's appearance is never an invitation to disrespect them."
-
-},
-
-
-    /* =====================================
-       DIGITAL RESPECT
-    ====================================== */
-
-    "digital-respect": {
-
-        number: "05",
-
-        title: "Digital Respect",
-
-        definition:
-            "Digital respect means communicating online while considering other people's dignity, boundaries, privacy and right to express different views. Online communication still affects real people. Ask yourself: Would I say this to someone face-to-face? Could this hurt someone? Disagreement does not have to become an attack. Don't share someone's private messages, photos, videos, personal information, or conversations without permission. Consent matters, especially when posting pictures, videos, or information involving other people.",
-
-        examples: [
-
-            "Disagreeing without insulting someone",
-
-            "Checking information before sharing it",
-
-            "Respecting someone's privacy",
-
-            "Thinking about the impact of a post before publishing it"
-
-        ],
-
-        signs: [
-
-            "Constructive disagreement",
-
-            "Respectful language",
-
-            "Responsible sharing",
-
-            "Respect for personal boundaries"
-
-        ],
-
-        action:
-            "Pause before posting. Ask whether your message is true, necessary, respectful and helpful. If emotions are high, consider waiting before responding.",
-
-        takeaway:
-            "Use your digital voice to build conversations, not destroy people."
-
+    if (!learningModal) {
+        console.error(
+            "Slash the Hate: #learningModal is missing from learn.html."
+        );
+        return;
     }
 
-};
+    if (!closeModal || !modalTitle || !modalNumber) {
+        console.error(
+            "Slash the Hate: One or more required modal elements are missing."
+        );
+        return;
+    }
 
+    if (learnButtons.length === 0) {
+        console.error(
+            "Slash the Hate: No .learn-more buttons were found."
+        );
+    }
 
-/* =========================================
-   OPEN LEARNING TOPIC
-========================================= */
-
-learnButtons.forEach(function(button) {
-
-    button.addEventListener(
-        "click",
-        function() {
-
-            const topic =
-                button.dataset.topic;
-
-            openTopic(topic);
-
-        }
+    console.log(
+        "Slash the Hate Learn page loaded.",
+        learnButtons.length,
+        "lesson buttons found."
     );
 
-});
+    /* =========================================
+       LESSON CONTENT
+    ========================================= */
 
+    const topics = {
+        "hate-speech": {
+            number: "LESSON 01",
+            title: "Hate Speech",
 
-/* =========================================
-   OPEN TOPIC FUNCTION
-========================================= */
+            definition:
+                "Hate speech is communication that attacks, threatens, " +
+                "or dehumanizes people because of characteristics such as " +
+                "their ethnicity, nationality, religion, or other identity.",
 
-function openTopic(topicName) {
+            examples: [
+                "Posting messages that encourage hatred against an ethnic group.",
+                "Using slurs to insult people because of their identity.",
+                "Publishing content that encourages discrimination or violence against a group."
+            ],
 
-    const topic =
-        topics[topicName];
+            signs: [
+                "Attacks directed at people because of their identity.",
+                "Language that dehumanizes or threatens a group.",
+                "Messages encouraging exclusion, discrimination, or violence."
+            ],
+
+            action:
+                "Do not share hateful content. Report it through the platform's " +
+                "reporting tools, support people who are targeted, and respond " +
+                "respectfully when it is safe to do so.",
+
+            takeaway:
+                "Respect people's dignity and identity. Disagreement should never " +
+                "become an excuse for hatred.",
+
+            video: ""
+        },
+
+        "cyberbullying": {
+            number: "LESSON 02",
+            title: "Cyberbullying",
+
+            definition:
+                "Cyberbullying is the use of digital platforms to bully, " +
+                "intimidate, humiliate, or repeatedly harm another person.",
+
+            examples: [
+                "Sending repeated insulting or threatening messages.",
+                "Sharing someone's embarrassing images to humiliate them.",
+                "Organizing people online to mock or target someone."
+            ],
+
+            signs: [
+                "Repeated online insults or threats.",
+                "A person is deliberately excluded from online groups.",
+                "Private information or embarrassing content is shared to cause harm."
+            ],
+
+            action:
+                "Save relevant evidence, block the person where appropriate, " +
+                "report the behaviour, and seek help from a trusted person " +
+                "or the appropriate authorities if necessary.",
+
+            takeaway:
+                "Your actions online affect real people. Choose kindness over bullying.",
+
+            video: ""
+        },
+
+        "harassment": {
+            number: "LESSON 03",
+            title: "Online Harassment",
+
+            definition:
+                "Online harassment is unwanted or abusive behaviour through " +
+                "digital communication that intimidates, threatens, or distresses someone.",
+
+            examples: [
+                "Repeated unwanted messages after someone asks for contact to stop.",
+                "Threatening someone through social media.",
+                "Sharing personal information to intimidate or target a person."
+            ],
+
+            signs: [
+                "Persistent unwanted contact.",
+                "Threats, intimidation, or abusive messages.",
+                "Attempts to frighten or control someone through digital platforms."
+            ],
+
+            action:
+                "Keep evidence, adjust your privacy settings, block and report " +
+                "the account, and seek appropriate support if you feel threatened.",
+
+            takeaway:
+                "Everyone deserves boundaries, privacy, and safety online.",
+
+            video: ""
+        },
+
+        "online-bodyshaming": {
+            number: "LESSON 04",
+            title: "Online Bodyshaming",
+
+            definition:
+                "Online bodyshaming is the act of insulting, mocking, or humiliating " +
+                "someone because of their body, appearance, size, or physical features.",
+
+            examples: [
+                "Mocking someone's weight in a public comment.",
+                "Posting memes intended to ridicule someone's appearance.",
+                "Making cruel remarks about a person's physical features."
+            ],
+
+            signs: [
+                "Comments intended to humiliate someone about their appearance.",
+                "Unwanted comparisons or degrading nicknames.",
+                "Edited images or memes created to ridicule a person's body."
+            ],
+
+            action:
+                "Avoid commenting on people's bodies in hurtful ways. Report abusive " +
+                "content, support the person targeted, and promote body respect.",
+
+            takeaway:
+                "A person's worth is not determined by their appearance.",
+
+            video: ""
+        },
+
+        "digital-respect": {
+            number: "LESSON 05",
+            title: "Digital Respect",
+
+            definition:
+                "Digital respect means treating other people with dignity, fairness, " +
+                "and consideration when communicating or sharing content online.",
+
+            examples: [
+                "Disagreeing with someone's opinion without insulting them.",
+                "Asking permission before sharing another person's private information.",
+                "Checking facts before sharing a potentially harmful claim."
+            ],
+
+            signs: [
+                "Respectful disagreement and constructive discussion.",
+                "Respect for privacy and personal boundaries.",
+                "Thoughtful sharing and responsible communication."
+            ],
+
+            action:
+                "Pause before posting. Check whether your message is accurate, " +
+                "necessary, respectful, and helpful. Think about how it may affect others.",
+
+            takeaway:
+                "Use your digital voice to build conversations, not destroy people.",
+
+            video: ""
+        }
+    };
+
+    /* =========================================
+       DISPLAY A LESSON
+    ========================================= */
+
+    function openTopic(topicName) {
+        const topic = topics[topicName];
+
+        if (!topic) {
+            console.error("Slash the Hate: Topic not found:", topicName);
+            return;
+        }
+
         currentTopic = topicName;
 
+        modalNumber.textContent = topic.number;
+        modalTitle.textContent = topic.title;
+        modalDefinition.textContent = topic.definition;
+        modalAction.textContent = topic.action;
+        modalTakeaway.textContent = topic.takeaway;
 
-    if (!topic) {
+        // Fill the examples list.
+        if (modalExamples) {
+            modalExamples.replaceChildren();
 
-        return;
+            topic.examples.forEach(function (example) {
+                const item = document.createElement("li");
+                item.textContent = example;
+                modalExamples.appendChild(item);
+            });
+        }
 
+        // Fill the warning signs list.
+        if (modalSigns) {
+            modalSigns.replaceChildren();
+
+            topic.signs.forEach(function (sign) {
+                const item = document.createElement("li");
+                item.textContent = sign;
+                modalSigns.appendChild(item);
+            });
+        }
+
+        // Load a lesson video only if a video URL is provided.
+        if (modalVideo && modalVideoSource) {
+            modalVideo.pause();
+            modalVideoSource.src = topic.video || "";
+            modalVideo.load();
+
+            modalVideo.hidden = !topic.video;
+        }
+
+        if (completionMessage) {
+            completionMessage.textContent = "";
+        }
+
+        if (completeLessonBtn) {
+            completeLessonBtn.disabled = false;
+            completeLessonBtn.textContent = "Mark Lesson as Completed";
+        }
+
+        learningModal.classList.add("active");
+        learningModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        console.log("Opened lesson:", topic.title);
     }
 
+    /* =========================================
+       CONNECT LEARN MORE BUTTONS
+    ========================================= */
 
-    /* =====================================
-       FILL MODAL
-    ====================================== */
+    learnButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
 
-    modalNumber.textContent =
-        topic.number;
+            const topicName = button.dataset.topic;
 
+            console.log("Learn more clicked:", topicName);
 
-    modalTitle.textContent =
-        topic.title;
+            openTopic(topicName);
+        });
+    });
 
+    /* =========================================
+       CLOSE THE LESSON MODAL
+    ========================================= */
 
-    modalDefinition.textContent =
-        topic.definition;
+    function closeLearningModal() {
+        learningModal.classList.remove("active");
+        learningModal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
 
-
-    modalAction.textContent =
-        topic.action;
-
-
-    modalTakeaway.textContent =
-        topic.takeaway;
-
-        modalVideoSource.src = topic.video;
-modalVideo.load();
-
-
-    /* =====================================
-       EXAMPLES
-    ====================================== */
-
-    modalExamples.innerHTML = "";
-
-
-    topic.examples.forEach(
-        function(example) {
-
-            const li =
-                document.createElement("li");
-
-            li.textContent =
-                example;
-
-            modalExamples.appendChild(li);
-
+        if (modalVideo) {
+            modalVideo.pause();
         }
-    );
 
+        currentTopic = null;
+    }
 
-    /* =====================================
-       WARNING SIGNS
-    ====================================== */
+    closeModal.addEventListener("click", closeLearningModal);
 
-    modalSigns.innerHTML = "";
-
-
-    topic.signs.forEach(
-        function(sign) {
-
-            const li =
-                document.createElement("li");
-
-            li.textContent =
-                sign;
-
-            modalSigns.appendChild(li);
-
-        }
-    );
-
-
-    /* =====================================
-       SHOW MODAL
-    ====================================== */
-
-    learningModal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
-}
-
-
-/* =========================================
-   CLOSE MODAL
-========================================= */
-
-closeModal.addEventListener(
-    "click",
-    closeLearningModal
-);
-
-
-function closeLearningModal() {
-
-    learningModal.classList.remove(
-        "active"
-    );
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
-}
-
-
-/* =========================================
-   CLOSE WHEN CLICKING OUTSIDE
-========================================= */
-
-learningModal.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target === learningModal
-        ) {
-
+    // Close when the user clicks the dark backdrop.
+    learningModal.addEventListener("click", function (event) {
+        if (event.target === learningModal) {
             closeLearningModal();
-
         }
+    });
 
-    }
-);
-
-
-/* =========================================
-   CLOSE WITH ESCAPE KEY
-========================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
+    // Close when the user presses Escape.
+    document.addEventListener("keydown", function (event) {
         if (
-            event.key === "Escape"
+            event.key === "Escape" &&
+            learningModal.classList.contains("active")
         ) {
-
             closeLearningModal();
-
         }
+    });
 
-    }
-);
+    /* =========================================
+       MARK LESSON AS COMPLETED
+    ========================================= */
 
-
-/* =========================================
-   MARK LESSON AS COMPLETE
-========================================= */
-
-
- /* =========================================
-   COMPLETE LESSON
-========================================= */
-
-completeLessonBtn.addEventListener(
-    "click",
-    async function() {
-
-        const token =
-            localStorage.getItem(
-                "slashTheHateToken"
-            );
-
-        const storedUser =
-            localStorage.getItem(
-                "slashTheHateUser"
-            );
-
-
-        if (!token || !storedUser) {
-
-            alert(
-                "Please login before completing a lesson."
-            );
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        const user =
-            JSON.parse(storedUser);
-
-
-        if (!currentTopic) {
-
-            alert(
-                "Please open a lesson first."
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            const response = await fetch(
-                "http://localhost:3000/api/user/progress/lesson-complete",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            `Bearer ${token}`
-                    },
-
-                    body: JSON.stringify({
-
-                        userId:
-                            user.id,
-
-                        topic:
-                            currentTopic
-
-                    })
-                }
-            );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                alert(
-                    data.message ||
-                    "Could not complete lesson."
-                );
-
+    if (completeLessonBtn) {
+        completeLessonBtn.addEventListener("click", async function () {
+            if (!currentTopic || isSavingProgress) {
                 return;
-
             }
 
+            const token = localStorage.getItem("slashTheHateToken");
 
-            alert(data.message);
+            if (!token) {
+                if (completionMessage) {
+                    completionMessage.textContent =
+                        "Please log in to save your lesson progress.";
+                }
+
+                return;
+            }
+
+            isSavingProgress = true;
+            completeLessonBtn.disabled = true;
+            completeLessonBtn.textContent = "Saving progress...";
+
+            if (completionMessage) {
+                completionMessage.textContent = "";
+            }
+
+            try {
+               
+                const response = await fetch(
+                    "http://localhost:3000/api/user/progress/lesson-complete",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
+                        body: JSON.stringify({
+                            topic: currentTopic
+                        })
+                    }
+                );
+
+                const result = await response.json().catch(function () {
+                    return {};
+                });
 
 
-            completeLessonBtn.textContent =
-                "Lesson Completed ✓";
+                if (!response.ok) {
+                    throw new Error(
+                        result.message ||
+                        result.error ||
+                        "The server could not save your progress."
+                    );
+                }
 
-            completeLessonBtn.disabled =
-                true;
+                if (completionMessage) {
+                    completionMessage.textContent =
+                        "Lesson completed! Your progress has been saved.";
+                }
 
-        }
+                completeLessonBtn.textContent = "Lesson Completed";
 
-        catch (error) {
+                console.log("Lesson progress saved:", currentTopic, result);
 
-            console.error(
-                "Lesson completion error:",
-                error
-            );
+            } catch (error) {
+                console.error("Could not save lesson progress:", error);
 
-            alert(
-                "Could not connect to the server."
-            );
+                if (completionMessage) {
+                    completionMessage.textContent =
+                        "The lesson could not be saved. Check your connection " +
+                        "and try again.";
+                }
 
-        }
+                completeLessonBtn.disabled = false;
+                completeLessonBtn.textContent = "Try Saving Again";
 
+            } finally {
+                isSavingProgress = false;
+            }
+        });
     }
-);
+});

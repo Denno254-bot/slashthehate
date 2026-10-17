@@ -2,7 +2,7 @@
 /* =========================================
    ADMIN DASHBOARD AUTHENTICATION
 ========================================= */
-
+const API_BASE_URL = "http://localhost:3000";
 const adminToken = localStorage.getItem("slashTheHateToken");
 const adminStoredUser = localStorage.getItem("slashTheHateUser");
 
@@ -31,14 +31,32 @@ try {
 if (!adminToken || !adminUser || adminUser.role !== "admin") {
     alert("Administrator access is required.");
     window.location.href = "login.html";
+
 } else {
     const adminName = document.getElementById("adminName");
+
     if (adminName) {
-        adminName.textContent = adminUser.fullName || "Administrator";
+        adminName.textContent =
+            adminUser.full_name ||
+            adminUser.fullName ||
+            "Administrator";
     }
 
     loadAdminDashboard();
+
+    // Refresh statistics and users every 15 seconds.
+    setInterval(async () => {
+        try {
+            await Promise.all([
+                loadAdminStats(),
+                loadAdminUsers()
+            ]);
+        } catch (error) {
+            console.error("Dashboard refresh failed:", error);
+        }
+    }, 15000);
 }
+
 
 document.getElementById("adminLogout")?.addEventListener(
     "click",
@@ -49,29 +67,41 @@ document.getElementById("adminLogout")?.addEventListener(
    AUTHENTICATED API REQUEST
 ========================================= */
 
+
 async function adminFetch(url, options = {}) {
-    const response = await fetch(url, {
+    const apiUrl = url.startsWith("http")
+        ? url
+        : `${API_BASE_URL}${url}`;
+
+    const response = await fetch(apiUrl, {
         ...options,
         headers: {
             ...(options.headers || {}),
             "Authorization": `Bearer ${adminToken}`,
-            ...(options.body ? { "Content-Type": "application/json" } : {})
+            ...(options.body
+                ? { "Content-Type": "application/json" }
+                : {})
         }
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (response.status === 401 || response.status === 403) {
         adminLogout();
-        throw new Error("Your session is invalid or access is denied.");
+        throw new Error(
+            data.message || "Your session is invalid or access is denied."
+        );
     }
 
     if (!response.ok) {
-        throw new Error(data.message || "Request failed.");
+        throw new Error(
+            data.message || `Request failed (${response.status}).`
+        );
     }
 
     return data;
 }
+
 
 /* =========================================
    LOAD DASHBOARD
@@ -101,7 +131,7 @@ async function loadAdminDashboard() {
 
 async function loadAdminStats() {
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/stats"
+        "/api/admin/stats"
     );
 
     document.getElementById("totalUsers").textContent =
@@ -149,7 +179,7 @@ async function loadAdminUsers() {
     table.replaceChildren();
 
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/users"
+        "/api/admin/users"
     );
 
     if (!data.users || data.users.length === 0) {
@@ -183,7 +213,7 @@ async function loadAdminReports() {
     table.replaceChildren();
 
     const data = await adminFetch(
-        "http://localhost:3000/api/admin/reports"
+       `${API_BASE_URL}/api/reports`
     );
 
     if (!data.reports || data.reports.length === 0) {
@@ -252,7 +282,7 @@ async function loadAdminReports() {
 
             try {
                 const result = await adminFetch(
-                    `http://localhost:3000/api/admin/reports/${report.id}/status`,
+                    `/api/admin/reports/${report.id}/status`,
                     {
                         method: "PATCH",
                         body: JSON.stringify({

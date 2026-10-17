@@ -2,7 +2,7 @@
 // ========================================
 // SLASH THE HATE - QUIZ DATA
 // ========================================
-
+const API_BASE_URL = "http://localhost:3000";
 const quizData = {
     "hate-speech": {
         title: "Hate Speech",
@@ -535,7 +535,7 @@ async function saveQuizResult(quizTopic, score, totalQuestions) {
 
     try {
         const response = await fetch(
-            "http://localhost:3000/api/quiz/complete",
+            `${API_BASE_URL}/api/quiz/complete`,
             {
                 method: "POST",
 

@@ -2,7 +2,7 @@
 /* =========================================
    DASHBOARD AUTHENTICATION
 ========================================= */
-
+const API_BASE_URL = "http://localhost:3000";
 const token = localStorage.getItem("slashTheHateToken");
 const storedUser = localStorage.getItem("slashTheHateUser");
 
@@ -89,8 +89,8 @@ function startDashboard() {
 
 async function loadUserProgress(userId) {
     try {
-        const response = await fetch(
-            `http://localhost:3000/api/user/progress/${userId}`,
+       const response = await fetch(
+    `${API_BASE_URL}/api/user/progress/${userId}`,
             {
                 method: "GET",
                 headers: {

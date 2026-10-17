@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const API_BASE_URL = "http://localhost:3000";
     const submitButton = document.getElementById("submitReport");
     const reportMessage = document.getElementById("reportMessage");
 
@@ -66,7 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-            const response = await fetch("http://localhost:3000/api/reports", {
+           const response = await fetch(
+    `${API_BASE_URL}/api/reports`,
+    
+            {
                 method: "POST",
 
                 headers: {
