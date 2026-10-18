@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const API_BASE_URL = "http://localhost:3000";
+    const API_BASE_URL = window.location.origin;
     const submitButton = document.getElementById("submitReport");
     const reportMessage = document.getElementById("reportMessage");
 

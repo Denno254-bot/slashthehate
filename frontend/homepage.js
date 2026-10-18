@@ -85,7 +85,7 @@ async function analyzeMessage() {
         // =====================================
 
            const response = await fetch(
-    "http://localhost:3000/api/analyze-post",
+    "/api/analyze-post",
                   {
                 method: "POST",
 

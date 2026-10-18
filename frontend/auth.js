@@ -1,14 +1,14 @@
 
 /* =========================================
    SLASH THE HATE - LOGIN & REGISTER JS
-   Local backend: http://localhost:3000
+   Backend API address is configured automatically
 ========================================= */
 
 // =========================================
 // API CONFIGURATION
 // =========================================
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = window.location.origin;
 
 // =========================================
 // SHOW / HIDE PASSWORD
@@ -122,9 +122,7 @@ if (loginForm) {
             console.error("Login error:", error);
 
             alert(
-                "Could not connect to the server. " +
-                "Make sure your backend is running at " +
-                API_BASE_URL + "."
+                "Could not connect to the server. Please check your internet connection or try again later."
             );
         }
     });
@@ -228,9 +226,7 @@ if (registerForm) {
                 console.error("Registration error:", error);
 
                 alert(
-                    "Could not connect to the server. " +
-                    "Make sure your backend is running at " +
-                    API_BASE_URL + "."
+                    "Could not connect to the server. Please check your internet connection or try again later."
                 );
             }
         }

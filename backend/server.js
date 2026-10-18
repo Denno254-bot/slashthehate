@@ -8,6 +8,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -37,6 +38,11 @@ if (!JWT_SECRET) {
 
 app.use(cors());
 app.use(express.json({ limit: "100kb" }));
+
+// Serve the Slash the Hate frontend
+const frontendPath = path.join(__dirname, "../frontend");
+
+app.use(express.static(frontendPath));
 
 // ============================================
 // CONSTANTS
@@ -215,15 +221,11 @@ function verifyAdmin(req, res, next) {
 
 // ============================================
 // HOME AND DATABASE TEST
-// ============================================
+// ===========================================
 
 app.get("/", (req, res) => {
-    res.json({
-        success: true,
-        message: "Slash the Hate API is running."
-    });
+    res.sendFile(path.join(__dirname, "../frontend/homepage.html"));
 });
-
 app.get("/api/database-test", asyncHandler(async (req, res) => {
     await db.query("SELECT 1 AS test");
 
@@ -232,6 +234,7 @@ app.get("/api/database-test", asyncHandler(async (req, res) => {
         message: "Slash the Hate database is connected."
     });
 }));
+
 
 // ============================================
 // REGISTER
