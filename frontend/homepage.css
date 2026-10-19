@@ -10093,3 +10093,35 @@ body:has(.learn-hero).modal-open {
         transition-duration: 0.01ms !important;
     }
 }
+/* MOBILE HERO: IMAGE FIRST, CONTENT SECOND */
+@media (max-width: 650px) {
+    .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .campaign-art {
+        order: 1;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .hero-content {
+        order: 2;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .campaign-art img {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3.6;
+        object-fit: contain;
+        border-radius: 21px;
+    }
+}
