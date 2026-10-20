@@ -35,7 +35,7 @@ html {
 
 body {
     min-width: 320px;
-    background: var(--cream);
+    background: rgba(235, 231, 219, 0.726);
     color: var(--ink);
     font-family: "Segoe UI", Arial, sans-serif;
     line-height: 1.7;
@@ -352,19 +352,12 @@ section {
     min-width: 0;
     padding: 13px;
 
-    border: 1px solid rgba(18, 102, 90, 0.14);
+    
     border-radius: 30px;
 
-    background:
-        radial-gradient(
-            circle at 85% 15%,
-            rgba(170, 23, 3, 0.7),
-            transparent 35%
-        ),
-        linear-gradient(145deg, #e5eee1, #fffdf5 75%);
 
-    box-shadow: var(--shadow);
-    transform: rotate(1deg);
+    box-shadow: var(--learn-cream);
+    transform: (0deg);
 }
 
 .campaign-art img {
@@ -3959,6 +3952,7 @@ css
     padding: 80px 25px;
 
     background:  #f1f1e3;
+    color: (var(--green));
 
 }
 
@@ -3987,7 +3981,7 @@ css
 
 .resources-hero h1 span {
 
-    color: var(--red);
+    color: var(--green);
 
 }
 
@@ -3998,7 +3992,7 @@ css
 
     margin: auto;
 
-    color: #94a1ac;
+    color: #3c3d3d;
 
     font-size: 14px;
 
@@ -4139,11 +4133,11 @@ css
 
     max-width: 430px;
 
-    color: #8996a2;
+    color: #272727;
 
-    font-size: 12px;
+    font-size: 20px;
 
-    line-height: 1.8;
+    line-height: 1.5;
 
 }
 
@@ -4221,9 +4215,9 @@ css
 
     max-width: 400px;
 
-    color: #8996a2;
+    color: #343536;
 
-    font-size: 12px;
+    font-size: 15px;
 
     line-height: 1.8;
 
@@ -4273,7 +4267,7 @@ css
 
     color: #a52121;
 
-    font-size: 14px;
+    font-size: 17px;
 
 }
 
@@ -4282,11 +4276,11 @@ css
 
     margin: 0;
 
-    color: #7f8c96;
+    color: #0c0c0c;
 
-    font-size: 11px;
+    font-size: 15px;
 
-    line-height: 1.7;
+    line-height: 1.6;
 
 }
 
@@ -4330,9 +4324,9 @@ css
 
 .resources-cta p {
 
-    color: #8996a2;
+    color: #212222;
 
-    font-size: 12px;
+    font-size: 17px;
 
 }
 
@@ -4357,7 +4351,7 @@ css
 
     border-radius: 5px;
 
-    font-size: 10px;
+    font-size: 15px;
 
     font-weight: 800;
 
@@ -4370,7 +4364,7 @@ css
 
     background: var(--red);
 
-    color: white;
+    color: rgb(190, 10, 10);
 
 }
 
@@ -10093,6 +10087,8 @@ body:has(.learn-hero).modal-open {
         transition-duration: 0.01ms !important;
     }
 }
+
+
 /* MOBILE HERO: IMAGE FIRST, CONTENT SECOND */
 @media (max-width: 650px) {
     .hero {
@@ -10125,3 +10121,4 @@ body:has(.learn-hero).modal-open {
         border-radius: 21px;
     }
 }
+
