@@ -615,14 +615,14 @@ img {
 
     .partners-grid,
     .patrons-grid {
-        width: 90%;
+        width: 120%;
         grid-template-columns: 1fr;
         gap: 24px;
     }
 
     .partner-image {
         height: 400px;
-        width: 500px;
+        width: 400px;
     }
 
     .patron-image {
