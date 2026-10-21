@@ -545,7 +545,54 @@ Analyze only the submitted text.`
             }
         ],
         temperature: 0.2,
-        response_format: { type: "json_object" }
+       response_format: {
+    type: "json_schema",
+    json_schema: {
+        name: "slash_the_hate_analysis",
+        strict: true,
+        schema: {
+            type: "object",
+            properties: {
+                status: {
+                    type: "string",
+                    enum: ["safe", "potentially_harmful", "harmful"]
+                },
+                category: {
+                    type: "string",
+                    enum: [
+                        "safe",
+                        "cyberbullying",
+                        "harassment",
+                        "hate_speech",
+                        "threat",
+                        "discrimination",
+                        "violence",
+                        "personal_attack",
+                        "other"
+                    ]
+                },
+                severity: {
+                    type: "string",
+                    enum: ["low", "medium", "high"]
+                },
+                reason: {
+                    type: "string"
+                },
+                suggestion: {
+                    type: "string"
+                }
+            },
+            required: [
+                "status",
+                "category",
+                "severity",
+                "reason",
+                "suggestion"
+            ],
+            additionalProperties: false
+        }
+    }
+}
     });
 
     const aiText = response.choices?.[0]?.message?.content;
