@@ -197,3 +197,24 @@ body.admin-checking {
 body.admin-authorized {
     visibility: visible;
 }
+
+/* =========================================
+   COMPETITION MANAGEMENT LINK
+========================================= */
+
+.competition-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 12px 22px;
+    background: #b0002a;
+    color: #ffffff;
+    border-radius: 7px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.competition-link:hover {
+    background: #850020;
+    transform: translateY(-2px);
+}

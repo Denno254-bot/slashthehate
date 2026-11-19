@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Competition Administration | Slash the Hate</title>
+
+    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="competition-admin.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="competition-admin-header">
+
+        <a href="homepage.html" class="admin-logo">
+            SLASH <span>THE HATE</span>
+        </a>
+
+        <div class="admin-header-actions">
+            <span id="adminName">Administrator</span>
+
+            <a href="admin.html">Main Admin Dashboard</a>
+
+            <button id="adminLogout" type="button">
+                Logout
+            </button>
+        </div>
+
+    </header>
+
+
+    <main class="competition-admin-container">
+
+        <!-- WELCOME -->
+        <section class="competition-admin-welcome">
+
+            <p>COMPETITION MANAGEMENT</p>
+
+            <h1>Competition Administration</h1>
+
+            <p>
+                Manage submissions, review videos, judge contestants
+                and publish competition results.
+            </p>
+
+        </section>
+
+
+        <!-- COMPETITION OVERVIEW -->
+        <section class="competition-overview">
+
+            <h2>Competition Overview</h2>
+
+            <div class="competition-stat-grid">
+
+                <article class="competition-stat">
+                    <span>Total Participants</span>
+                    <strong id="totalParticipants">0</strong>
+                </article>
+
+                <article class="competition-stat">
+                    <span>Total Submissions</span>
+                    <strong id="totalSubmissions">0</strong>
+                </article>
+
+                <article class="competition-stat">
+                    <span>Pending Reviews</span>
+                    <strong id="pendingReviews">0</strong>
+                </article>
+
+                <article class="competition-stat">
+                    <span>Completed Reviews</span>
+                    <strong id="completedReviews">0</strong>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- COMPETITION DETAILS -->
+        <section class="competition-admin-section">
+
+            <h2>Competition Details</h2>
+
+            <div class="competition-details-card">
+
+                <h3 id="competitionTitle">
+                    #SlashTheHate Digital Creativity Competition
+                </h3>
+
+                <p>
+                    <strong>Theme:</strong>
+                    <span id="currentTheme">Loading...</span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span id="currentStatus">Loading...</span>
+                </p>
+
+                <p>
+                    <strong>Creative Brief:</strong>
+                    <span id="currentBrief">Loading...</span>
+                </p>
+
+                <p>
+                    <strong>Instructions:</strong>
+                    <span id="currentInstructions">Loading...</span>
+                </p>
+
+                <div class="competition-status-actions">
+
+                    <button id="openCompetitionButton" type="button">
+                        Open Submissions
+                    </button>
+
+                    <button id="closeCompetitionButton" type="button">
+                        Close Submissions
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CREATE COMPETITION -->
+        <section class="competition-admin-section">
+
+            <h2>Create Competition</h2>
+
+            <form id="competitionForm">
+
+                <label for="competitionTheme">
+                    Competition Theme
+                </label>
+
+                <input
+                    type="text"
+                    id="competitionTheme"
+                    required
+                >
+
+                <label for="competitionBrief">
+                    Creative Brief
+                </label>
+
+                <textarea
+                    id="competitionBrief"
+                    rows="4"
+                    required
+                ></textarea>
+
+                <label for="competitionInstructions">
+                    Submission Instructions
+                </label>
+
+                <textarea
+                    id="competitionInstructions"
+                    rows="4"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Create Competition
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- JUDGING CRITERIA -->
+        <section class="competition-admin-section">
+
+            <h2>Judging Criteria</h2>
+
+            <p>
+                Create your own judging criteria and assign maximum marks.
+            </p>
+
+            <form id="criteriaForm">
+
+                <label for="criterionName">
+                    Criterion Name
+                </label>
+
+                <input
+                    type="text"
+                    id="criterionName"
+                    required
+                >
+
+                <label for="criterionDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="criterionDescription"
+                    rows="3"
+                    required
+                ></textarea>
+
+                <label for="maximumScore">
+                    Maximum Score
+                </label>
+
+                <input
+                    type="number"
+                    id="maximumScore"
+                    min="1"
+                    step="0.01"
+                    required
+                >
+
+                <button type="submit">
+                    Add Judging Criterion
+                </button>
+
+            </form>
+
+            <div id="criteriaList">
+                Loading judging criteria...
+            </div>
+
+        </section>
+
+
+        <!-- PRIZES -->
+        <section class="competition-admin-section">
+
+            <h2>Competition Prizes</h2>
+
+            <form id="prizeForm">
+
+                <label for="prizeTitle">
+                    Prize Title
+                </label>
+
+                <input
+                    type="text"
+                    id="prizeTitle"
+                    required
+                >
+
+                <label for="prizeDescription">
+                    Prize Description
+                </label>
+
+                <textarea
+                    id="prizeDescription"
+                    rows="3"
+                    required
+                ></textarea>
+
+                <label for="prizeValue">
+                    Prize Value
+                </label>
+
+                <input
+                    type="text"
+                    id="prizeValue"
+                >
+
+                <button type="submit">
+                    Add Prize
+                </button>
+
+            </form>
+
+            <div id="prizesList"></div>
+
+        </section>
+
+
+        <!-- VIDEO SUBMISSIONS -->
+        <section class="competition-admin-section">
+
+            <h2>Submitted Videos</h2>
+
+            <p>
+                Review videos submitted by competition participants.
+            </p>
+
+            <div class="admin-submissions-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Video Title</th>
+                            <th>Participant</th>
+                            <th>Submission Date</th>
+                            <th>Duration</th>
+                            <th>Review Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="submissionsTable">
+
+                        <tr>
+                            <td colspan="7">
+                                Loading submissions...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- VIDEO REVIEW -->
+        <section
+            class="competition-admin-section"
+            id="videoReviewSection"
+            hidden
+        >
+
+            <h2>Review Submitted Video</h2>
+
+            <div id="selectedSubmissionDetails"></div>
+
+            <video
+    id="privateVideoPlayer"
+    controls
+    playsinline
+    preload="metadata"
+    style="width: 100%; max-width: 900px; border-radius: 10px; background: #000;"
+>
+    Your browser does not support video playback.
+</video>
+
+            <h3>Judging Scores</h3>
+
+            <form id="scoringForm">
+
+                <div id="scoringCriteria">
+                    Loading judging criteria...
+                </div>
+
+                <label for="submissionFeedback">
+                    Administrator Feedback
+                </label>
+
+                <textarea
+                    id="submissionFeedback"
+                    rows="5"
+                    placeholder="Write feedback for the participant..."
+                ></textarea>
+
+                <button type="submit">
+                    Save Scores and Feedback
+                </button>
+
+            </form>
+
+            <button id="completeReviewButton" type="button">
+                Mark Review as Completed
+            </button>
+
+        </section>
+
+
+        <!-- WINNERS -->
+        <section class="competition-admin-section">
+
+            <h2>Competition Winners</h2>
+
+            <p>
+                Select winning submissions and publish official results.
+            </p>
+
+            <form id="winnerForm">
+
+                <label for="winnerSubmission">
+                    Select Submission
+                </label>
+
+                <select id="winnerSubmission" required>
+                    <option value="">Select a submitted video</option>
+                </select>
+
+                <label for="winnerPrize">
+                    Select Prize
+                </label>
+
+                <select id="winnerPrize" required>
+                    <option value="">Select a prize</option>
+                </select>
+
+                <label for="winnerPosition">
+                    Position
+                </label>
+
+                <input
+                    type="number"
+                    id="winnerPosition"
+                    min="1"
+                    required
+                >
+
+                <label for="winnerAwardTitle">
+                    Award Title
+                </label>
+
+                <input
+                    type="text"
+                    id="winnerAwardTitle"
+                    required
+                >
+
+                <button type="submit">
+                    Save Winner
+                </button>
+
+            </form>
+
+            <button id="publishResultsButton" type="button">
+                Publish Official Results
+            </button>
+
+            <div id="winnersList"></div>
+
+        </section>
+
+
+        <!-- ADMIN MESSAGES -->
+        <p
+            id="competitionAdminMessage"
+            role="status"
+            aria-live="polite"
+        ></p>
+
+    </main>
+
+
+    <script src="competition-admin.js"></script>
+
+</body>
+</html>

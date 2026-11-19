@@ -1,0 +1,797 @@
+
+/* =========================================
+   COMPETITION ADMIN AUTHENTICATION
+========================================= */
+
+const API_BASE_URL = window.location.origin;
+
+const adminToken = localStorage.getItem("slashTheHateToken");
+const adminStoredUser = localStorage.getItem("slashTheHateUser");
+
+const adminMessage = document.getElementById(
+    "competitionAdminMessage"
+);
+
+let adminUser;
+let currentCompetitionId = null;
+try {
+    adminUser = JSON.parse(adminStoredUser);
+} catch (error) {
+    adminUser = null;
+}
+
+
+/* =========================================
+   ADMIN MESSAGES
+========================================= */
+
+function showCompetitionAdminMessage(message) {
+    if (adminMessage) {
+        adminMessage.textContent = message;
+    }
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function competitionAdminLogout() {
+    localStorage.removeItem("slashTheHateToken");
+    localStorage.removeItem("slashTheHateUser");
+
+    window.location.href = "login.html";
+}
+
+document.getElementById("adminLogout").addEventListener(
+    "click",
+    competitionAdminLogout
+);
+
+
+/* =========================================
+   AUTHENTICATION CHECK
+========================================= */
+
+if (
+    !adminToken ||
+    !adminUser ||
+    adminUser.role !== "admin"
+) {
+    alert("Administrator access is required.");
+    competitionAdminLogout();
+
+} else {
+
+    const adminName = document.getElementById("adminName");
+
+    adminName.textContent =
+        adminUser.full_name ||
+        adminUser.fullName ||
+        "Administrator";
+
+    loadCompetitionAdminDashboard();
+}
+
+
+/* =========================================
+   AUTHENTICATED API REQUEST
+========================================= */
+
+async function competitionAdminFetch(url, options = {}) {
+
+    const response = await fetch(`${API_BASE_URL}${url}`, {
+        ...options,
+
+        headers: {
+            ...(options.headers || {}),
+
+            "Authorization": `Bearer ${adminToken}`,
+
+            ...(options.body
+                ? { "Content-Type": "application/json" }
+                : {})
+        }
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401 || response.status === 403) {
+        competitionAdminLogout();
+
+        throw new Error(
+            data.message || "Administrator access denied."
+        );
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || `Request failed (${response.status}).`
+        );
+    }
+
+    return data;
+}
+
+
+/* =========================================
+   SAFE HTML TEXT
+========================================= */
+
+function escapeAdminHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[character]);
+}
+
+
+/* =========================================
+   LOAD COMPETITION DASHBOARD
+========================================= */
+
+async function loadCompetitionAdminDashboard() {
+
+    try {
+
+        showCompetitionAdminMessage(
+            "Loading competition administration data..."
+        );
+
+        const data = await competitionAdminFetch(
+            "/api/competition/admin/dashboard"
+        );
+
+        if (!data.success) {
+            throw new Error(
+                data.message || "Unable to load competition data."
+            );
+        }
+
+        displayCompetitionStatistics(data.statistics);
+
+        displayCompetitionDetails(data.competition);
+
+        await loadCompetitionCriteria();
+await loadCompetitionPrizes();
+
+        displayCompetitionSubmissions(data.submissions);
+
+        showCompetitionAdminMessage(
+            "Competition dashboard loaded successfully."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Competition administration error:",
+            error
+        );
+
+        showCompetitionAdminMessage(
+            error.message || "Unable to load competition dashboard."
+        );
+    }
+}
+
+
+/* =========================================
+   DISPLAY STATISTICS
+========================================= */
+
+function displayCompetitionStatistics(statistics) {
+
+    document.getElementById("totalParticipants").textContent =
+        statistics?.totalParticipants ?? 0;
+
+    document.getElementById("totalSubmissions").textContent =
+        statistics?.totalSubmissions ?? 0;
+
+    document.getElementById("pendingReviews").textContent =
+        statistics?.pendingReviews ?? 0;
+
+    document.getElementById("completedReviews").textContent =
+        statistics?.completedReviews ?? 0;
+}
+
+
+/* =========================================
+   DISPLAY COMPETITION DETAILS
+========================================= */
+
+function displayCompetitionDetails(competition) {
+currentCompetitionId = competition ? competition.id : null;
+    if (!competition) {
+
+        document.getElementById("currentTheme").textContent =
+            "No competition created yet.";
+
+        document.getElementById("currentStatus").textContent =
+            "Not created";
+
+        document.getElementById("currentBrief").textContent =
+            "Not available";
+
+        document.getElementById("currentInstructions").textContent =
+            "Not available";
+
+        return;
+    }
+
+    document.getElementById("competitionTitle").textContent =
+        competition.title;
+
+    document.getElementById("currentTheme").textContent =
+        competition.theme;
+
+    document.getElementById("currentStatus").textContent =
+        competition.status.toUpperCase();
+
+    document.getElementById("currentBrief").textContent =
+        competition.brief;
+
+    document.getElementById("currentInstructions").textContent =
+        competition.instructions;
+}
+
+
+
+/* =========================================
+   DISPLAY SUBMISSIONS
+========================================= */
+
+
+
+function displayCompetitionSubmissions(submissions) {
+
+    const table = document.getElementById("submissionsTable");
+
+    if (!submissions || submissions.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">No video submissions found.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = submissions.map(submission => {
+
+        const submissionDate = new Date(
+            submission.submitted_at
+        ).toLocaleString();
+
+        const duration = Number(submission.duration_seconds);
+
+        const formattedDuration = Number.isFinite(duration)
+            ? `${Math.floor(duration / 60)}m ${Math.round(duration % 60)}s`
+            : "Unavailable";
+
+        return `
+            <tr>
+                <td>${escapeAdminHTML(submission.id)}</td>
+                <td>${escapeAdminHTML(submission.video_title)}</td>
+
+                <td>
+                    ${escapeAdminHTML(submission.full_name)}
+                    <br>
+                    <small>@${escapeAdminHTML(submission.username)}</small>
+                </td>
+
+                <td>${escapeAdminHTML(submissionDate)}</td>
+                <td>${escapeAdminHTML(formattedDuration)}</td>
+
+                <td>
+                    ${escapeAdminHTML(submission.review_status.toUpperCase())}
+                </td>
+
+                <td>
+                    <button
+                        type="button"
+                        class="review-video-button"
+                        data-submission-id="${escapeAdminHTML(submission.id)}"
+                    >
+                        Review Video
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    }).join("");
+
+
+
+    // Attach an event directly to every Review Video button
+    const reviewButtons = table.querySelectorAll(".review-video-button");
+
+    reviewButtons.forEach(button => {
+
+        button.addEventListener("click", async function () {
+
+            const submissionId = this.dataset.submissionId;
+
+            showCompetitionAdminMessage(
+                `Opening video for submission #${submissionId}...`
+            );
+
+            const videoPlayer = document.getElementById("privateVideoPlayer");
+            const reviewSection = document.getElementById("videoReviewSection");
+            const details = document.getElementById("selectedSubmissionDetails");
+
+            this.disabled = true;
+            this.textContent = "Loading...";
+
+            try {
+
+                const data = await competitionAdminFetch(
+                    `/api/competition/admin/submissions/${submissionId}/video`
+                );
+
+                if (!data.success || !data.videoUrl) {
+                    throw new Error(data.message || "Unable to load video.");
+                }
+
+                videoPlayer.onerror = function () {
+                    showCompetitionAdminMessage(
+                        "Video playback failed. Please try again."
+                    );
+                };
+
+                videoPlayer.pause();
+                videoPlayer.src = data.videoUrl;
+                videoPlayer.load();
+
+                details.textContent = `Reviewing submission #${submissionId}`;
+
+                reviewSection.style.display = "block";
+
+                reviewSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            } catch (error) {
+
+                showCompetitionAdminMessage(
+                    error.message || "Unable to load video."
+                );
+
+            } finally {
+
+                this.disabled = false;
+                this.textContent = "Review Video";
+
+            }
+
+        });
+
+    });
+}
+
+/* =========================================
+   CREATE COMPETITION
+========================================= */
+
+const competitionForm = document.getElementById("competitionForm");
+
+competitionForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const theme = document.getElementById(
+        "competitionTheme"
+    ).value.trim();
+
+    const brief = document.getElementById(
+        "competitionBrief"
+    ).value.trim();
+
+    const instructions = document.getElementById(
+        "competitionInstructions"
+    ).value.trim();
+
+    try {
+
+        showCompetitionAdminMessage(
+            "Creating competition..."
+        );
+
+        const data = await competitionAdminFetch(
+            
+            "/api/competition/admin/competitions",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    theme,
+                    brief,
+                    instructions
+                })
+            }
+        );
+
+        showCompetitionAdminMessage(
+            data.message || "Competition created successfully."
+        );
+
+        competitionForm.reset();
+
+        await loadCompetitionAdminDashboard();
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(error.message);
+
+    }
+
+});
+
+
+/* =========================================
+   ADD JUDGING CRITERION
+========================================= */
+
+const criteriaForm = document.getElementById("criteriaForm");
+
+criteriaForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const competitionId = currentCompetition?.id;
+
+    if (!competitionId) {
+        showCompetitionAdminMessage(
+            "Create or load a competition first."
+        );
+        return;
+    }
+
+    const criterionName = document.getElementById(
+        "criterionName"
+    ).value.trim();
+
+    const description = document.getElementById(
+        "criterionDescription"
+    ).value.trim();
+
+    const maximumScore = Number(
+        document.getElementById("maximumScore").value
+    );
+
+    try {
+
+        showCompetitionAdminMessage(
+            "Adding judging criterion..."
+        );
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/competitions/${competitionId}/criteria`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    criterionName,
+                    description,
+                    maximumScore
+                })
+            }
+        );
+
+        showCompetitionAdminMessage(data.message);
+
+        criteriaForm.reset();
+
+        await loadCompetitionCriteria();
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(error.message);
+
+    }
+
+});
+
+
+/* =========================================
+   LOAD JUDGING CRITERIA
+========================================= */
+
+async function loadCompetitionCriteria() {
+
+    const criteriaList = document.getElementById("criteriaList");
+
+    if (!currentCompetitionId) {
+        criteriaList.textContent =
+            "Create a competition before adding criteria.";
+        return;
+    }
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/competitions/${currentCompetitionId}/criteria`
+        );
+
+        if (!data.criteria || data.criteria.length === 0) {
+            criteriaList.textContent =
+                "No judging criteria have been added yet.";
+            return;
+        }
+
+        criteriaList.innerHTML = data.criteria.map(criterion => `
+
+            <article class="criteria-item">
+
+                <h4>
+                    ${escapeAdminHTML(criterion.criterion_name)}
+                </h4>
+
+                <p>
+                    ${escapeAdminHTML(criterion.description || "")}
+                </p>
+
+                <strong>
+                    Maximum Score:
+                    ${escapeAdminHTML(criterion.maximum_score)}
+                </strong>
+
+            </article>
+
+        `).join("");
+
+    } catch (error) {
+
+        criteriaList.textContent = error.message;
+
+    }
+
+}
+
+
+
+    // ============================================
+    // GET PRIVATE VIDEO FOR ADMIN REVIEW
+    // ADMINISTRATORS ONLY
+    // ============================================
+
+    router.get(
+        "/admin/submissions/:id/video",
+        verifyToken,
+        verifyAdmin,
+        asyncHandler(async (req, res) => {
+
+            const submissionId = req.params.id;
+
+            if (!isValidId(submissionId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid submission ID."
+                });
+            }
+
+            const [submissions] = await db.query(
+                `SELECT id, cloudinary_public_id, video_format
+                 FROM competition_submissions_v2
+                 WHERE id = ?
+                 LIMIT 1`,
+                [Number(submissionId)]
+            );
+
+            if (!submissions.length) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Video submission not found."
+                });
+            }
+
+            const submission = submissions[0];
+
+            if (!submission.cloudinary_public_id) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Video storage reference not found."
+                });
+            }
+
+            const expiresAt = Math.floor(Date.now() / 1000) + 300;
+
+            const videoUrl = cloudinary.utils.private_download_url(
+                submission.cloudinary_public_id,
+                submission.video_format,
+                {
+                    resource_type: "video",
+                    type: "authenticated",
+                    expires_at: expiresAt,
+                    attachment: false
+                }
+            );
+
+            res.json({
+                success: true,
+                videoUrl,
+                expiresAt
+            });
+
+        })
+    );
+
+
+/* =========================================
+   ADD COMPETITION PRIZE
+========================================= */
+
+const prizeForm = document.getElementById("prizeForm");
+
+prizeForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    if (!currentCompetitionId) {
+        showCompetitionAdminMessage(
+            "Create a competition before adding prizes."
+        );
+        return;
+    }
+
+    const prizeTitle = document.getElementById(
+        "prizeTitle"
+    ).value.trim();
+
+    const prizeDescription = document.getElementById(
+        "prizeDescription"
+    ).value.trim();
+
+    const prizeValue = document.getElementById(
+        "prizeValue"
+    ).value.trim();
+
+    try {
+
+        showCompetitionAdminMessage("Adding competition prize...");
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/competitions/${currentCompetitionId}/prizes`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    prizeTitle,
+                    prizeDescription,
+                    prizeValue
+                })
+            }
+        );
+
+        showCompetitionAdminMessage(data.message);
+
+        prizeForm.reset();
+
+        await loadCompetitionPrizes();
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(error.message);
+
+    }
+
+});
+
+
+/* =========================================
+   LOAD COMPETITION PRIZES
+========================================= */
+
+async function loadCompetitionPrizes() {
+
+    const prizesList = document.getElementById("prizesList");
+
+    if (!currentCompetitionId) {
+        prizesList.textContent =
+            "Create a competition before adding prizes.";
+        return;
+    }
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/competitions/${currentCompetitionId}/prizes`
+        );
+
+        const prizes = data.prizes || [];
+
+        if (prizes.length === 0) {
+            prizesList.textContent =
+                "No prizes have been added yet.";
+            return;
+        }
+
+        prizesList.innerHTML = prizes.map(prize => `
+
+            <article class="prize-item">
+
+                <h4>${escapeAdminHTML(prize.prize_title)}</h4>
+
+                <p>
+                    ${escapeAdminHTML(
+                        prize.prize_description || ""
+                    )}
+                </p>
+
+                <strong>
+                    Value:
+                    ${escapeAdminHTML(prize.prize_value || "To be announced")}
+                </strong>
+
+            </article>
+
+        `).join("");
+
+    } catch (error) {
+
+        prizesList.textContent = error.message;
+
+    }
+
+}
+
+/* =========================================
+   OPEN AND CLOSE COMPETITION SUBMISSIONS
+========================================= */
+
+async function updateCompetitionStatus(status) {
+
+    if (!currentCompetitionId) {
+        showCompetitionAdminMessage(
+            "No competition is available."
+        );
+        return;
+    }
+
+    const action = status === "open" ? "open" : "close";
+
+    const confirmed = confirm(
+        `Are you sure you want to ${action} competition submissions?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/competitions/${currentCompetitionId}/status`,
+            {
+                method: "PATCH",
+                body: JSON.stringify({ status })
+            }
+        );
+
+        showCompetitionAdminMessage(data.message);
+
+        await loadCompetitionAdminDashboard();
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(
+            error.message || "Unable to update competition status."
+        );
+
+    }
+}
+
+
+/* =========================================
+   COMPETITION STATUS BUTTON EVENTS
+========================================= */
+
+document.getElementById("openCompetitionButton")?.addEventListener(
+    "click",
+    () => updateCompetitionStatus("open")
+);
+
+document.getElementById("closeCompetitionButton")?.addEventListener(
+    "click",
+    () => updateCompetitionStatus("closed")
+);
+
+

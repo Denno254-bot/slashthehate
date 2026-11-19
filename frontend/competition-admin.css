@@ -1,0 +1,387 @@
+
+/* =========================================
+   COMPETITION ADMINISTRATION
+========================================= */
+
+.competition-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 6%;
+    background: #101b2d;
+    color: #ffffff;
+    flex-wrap: wrap;
+}
+
+.competition-admin-header .admin-logo {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.competition-admin-header .admin-logo span {
+    color: #e84b4b;
+}
+
+.admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.admin-header-actions a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.admin-header-actions button,
+.competition-admin-container button {
+    border: none;
+    border-radius: 7px;
+    padding: 11px 18px;
+    background: #e84b4b;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.admin-header-actions button:hover,
+.competition-admin-container button:hover {
+    background: #c93636;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.competition-admin-container {
+    width: 90%;
+    max-width: 1250px;
+    margin: 35px auto;
+}
+
+.competition-admin-welcome {
+    margin-bottom: 35px;
+}
+
+.competition-admin-welcome > p:first-child {
+    color: #e84b4b;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.competition-admin-welcome h1 {
+    color: #14243b;
+    font-size: clamp(28px, 4vw, 42px);
+    margin: 10px 0;
+}
+
+.competition-admin-welcome p {
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   SECTIONS AND CARDS
+========================================= */
+
+.competition-overview,
+.competition-admin-section {
+    margin-bottom: 35px;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.competition-admin-section h2,
+.competition-overview h2 {
+    color: #14243b;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.competition-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.competition-stat {
+    padding: 22px;
+    background: #f3f6fa;
+    border-radius: 10px;
+    border-left: 4px solid #e84b4b;
+}
+
+.competition-stat span {
+    display: block;
+    color: #526174;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.competition-stat strong {
+    color: #14243b;
+    font-size: 30px;
+}
+
+
+/* =========================================
+   COMPETITION DETAILS
+========================================= */
+
+.competition-details-card {
+    padding: 22px;
+    background: #f5f7fa;
+    border-radius: 10px;
+}
+
+.competition-details-card h3 {
+    color: #14243b;
+    font-size: 21px;
+}
+
+.competition-details-card p {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.competition-status-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#closeCompetitionButton {
+    background: #343f50;
+}
+
+#closeCompetitionButton:hover {
+    background: #1e293b;
+}
+
+
+/* =========================================
+   FORMS
+========================================= */
+
+.competition-admin-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 750px;
+}
+
+.competition-admin-container label {
+    color: #26364b;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.competition-admin-container input,
+.competition-admin-container textarea,
+.competition-admin-container select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd3dd;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 15px;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.competition-admin-container textarea {
+    resize: vertical;
+}
+
+.competition-admin-container input:focus,
+.competition-admin-container textarea:focus,
+.competition-admin-container select:focus {
+    outline: 2px solid #e84b4b;
+    border-color: transparent;
+}
+
+.competition-admin-container form button {
+    align-self: flex-start;
+    margin-top: 12px;
+}
+
+
+/* =========================================
+   TABLES
+========================================= */
+
+.admin-submissions-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-submissions-wrapper table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.admin-submissions-wrapper th,
+.admin-submissions-wrapper td {
+    padding: 14px;
+    border-bottom: 1px solid #e3e7ed;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.admin-submissions-wrapper th {
+    background: #14243b;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.admin-submissions-wrapper tbody tr:hover {
+    background: #f5f7fa;
+}
+
+
+/* =========================================
+   CRITERIA, PRIZES AND WINNERS
+========================================= */
+
+#criteriaList,
+#prizesList,
+#winnersList {
+    margin-top: 20px;
+}
+
+.criteria-item,
+.prize-item,
+.winner-item {
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #f3f6fa;
+    border-radius: 8px;
+    border-left: 4px solid #e84b4b;
+}
+
+.criteria-item h4,
+.prize-item h4,
+.winner-item h4 {
+    margin-top: 0;
+    color: #14243b;
+}
+
+
+/* =========================================
+   VIDEO REVIEW
+========================================= */
+
+#videoReviewSection {
+    border-top: 4px solid #e84b4b;
+}
+
+#privateVideoPlayer {
+    margin: 20px 0;
+    background: #101b2d;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#privateVideoPlayer video {
+    width: 100%;
+    max-height: 550px;
+    display: block;
+}
+
+.scoring-criterion {
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f3f6fa;
+    border-radius: 8px;
+}
+
+#completeReviewButton {
+    margin-top: 18px;
+    background: #18794e;
+}
+
+#completeReviewButton:hover {
+    background: #12613e;
+}
+
+#publishResultsButton {
+    margin-top: 20px;
+    background: #18794e;
+}
+
+
+/* =========================================
+   ADMIN MESSAGE
+========================================= */
+
+#competitionAdminMessage {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 850px) {
+    .competition-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .competition-admin-container {
+        width: 94%;
+    }
+}
+
+@media (max-width: 550px) {
+    .competition-admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-header-actions {
+        gap: 12px;
+    }
+
+    .competition-admin-container {
+        width: 92%;
+        margin: 22px auto;
+    }
+
+    .competition-overview,
+    .competition-admin-section {
+        padding: 17px;
+    }
+
+    .competition-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .competition-stat strong {
+        font-size: 25px;
+    }
+
+    .competition-admin-container form button {
+        width: 100%;
+    }
+}

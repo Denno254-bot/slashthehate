@@ -15,6 +15,7 @@ const jwt = require("jsonwebtoken");
 const Groq = require("groq-sdk");
 const db = require("./database");
 const { sendEmail } = require("./email");
+const createCompetitionRouter = require("./competition-v2");
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -218,7 +219,19 @@ function verifyAdmin(req, res, next) {
 
     next();
 }
+// ============================================
+// COMPETITION V2 ROUTES
+// ============================================
 
+app.use(
+    "/api/competition",
+    createCompetitionRouter({
+        db,
+        verifyToken,
+        verifyAdmin,
+        sendEmail
+    })
+);
 // ============================================
 // HOME AND DATABASE TEST
 // ===========================================
