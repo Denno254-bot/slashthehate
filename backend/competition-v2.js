@@ -1239,6 +1239,396 @@ attachment: false
         })
     );
 
+
+    // ============================================
+    // LOAD SUBMISSION REVIEW DATA
+    // ADMINISTRATORS ONLY
+    // ============================================
+
+    router.get(
+        "/admin/submissions/:id/review",
+        verifyToken,
+        verifyAdmin,
+        asyncHandler(async (req, res) => {
+            const submissionId = req.params.id;
+
+            if (!isValidId(submissionId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid submission ID."
+                });
+            }
+
+            const [submissions] = await db.query(
+                `SELECT s.id, s.competition_id, s.video_title,
+                        s.review_status, c.results_published
+                 FROM competition_submissions_v2 s
+                 JOIN competitions_v2 c
+                    ON c.id = s.competition_id
+                 WHERE s.id = ?
+                 LIMIT 1`,
+                [Number(submissionId)]
+            );
+
+            if (!submissions.length) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Submission not found."
+                });
+            }
+
+            const submission = submissions[0];
+
+            const [criteria] = await db.query(
+                `SELECT id, criterion_name, description,
+                        maximum_score, display_order
+                 FROM competition_criteria_v2
+                 WHERE competition_id = ?
+                 ORDER BY display_order ASC`,
+                [submission.competition_id]
+            );
+
+            const [scores] = await db.query(
+                `SELECT criterion_id, score
+                 FROM competition_scores_v2
+                 WHERE submission_id = ?`,
+                [Number(submissionId)]
+            );
+
+            const [feedbackRows] = await db.query(
+                `SELECT feedback
+                 FROM competition_feedback_v2
+                 WHERE submission_id = ?
+                 ORDER BY created_at DESC, id DESC
+                 LIMIT 1`,
+                [Number(submissionId)]
+            );
+
+            res.json({
+                success: true,
+                submission,
+                criteria,
+                scores,
+                feedback: feedbackRows.length
+                    ? feedbackRows[0].feedback
+                    : ""
+            });
+        })
+    );
+
+
+    // ============================================
+    // SAVE JUDGING SCORES AND FEEDBACK
+    // ADMINISTRATORS ONLY
+    // ============================================
+
+    router.post(
+        "/admin/submissions/:id/review",
+        verifyToken,
+        verifyAdmin,
+        asyncHandler(async (req, res) => {
+            const submissionId = req.params.id;
+            const adminId = Number(req.user.userId);
+            const { scores, feedback } = req.body;
+
+            if (!isValidId(submissionId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid submission ID."
+                });
+            }
+
+            if (!Array.isArray(scores) || !scores.length) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Please provide all judging scores."
+                });
+            }
+
+            if (
+                feedback !== undefined &&
+                typeof feedback !== "string"
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid administrator feedback."
+                });
+            }
+
+            const connection = await db.getConnection();
+
+            try {
+                await connection.beginTransaction();
+
+                const [submissions] = await connection.query(
+                    `SELECT s.id, s.competition_id,
+                            c.results_published
+                     FROM competition_submissions_v2 s
+                     JOIN competitions_v2 c
+                        ON c.id = s.competition_id
+                     WHERE s.id = ?
+                     FOR UPDATE`,
+                    [Number(submissionId)]
+                );
+
+                if (!submissions.length) {
+                    await connection.rollback();
+
+                    return res.status(404).json({
+                        success: false,
+                        message: "Submission not found."
+                    });
+                }
+
+                const submission = submissions[0];
+
+                if (Number(submission.results_published)) {
+                    await connection.rollback();
+
+                    return res.status(409).json({
+                        success: false,
+                        message:
+                            "Reviews cannot be changed after results are published."
+                    });
+                }
+
+                const [criteria] = await connection.query(
+                    `SELECT id, maximum_score
+                     FROM competition_criteria_v2
+                     WHERE competition_id = ?`,
+                    [submission.competition_id]
+                );
+
+                if (!criteria.length) {
+                    await connection.rollback();
+
+                    return res.status(400).json({
+                        success: false,
+                        message: "No judging criteria have been configured."
+                    });
+                }
+
+                if (scores.length !== criteria.length) {
+                    await connection.rollback();
+
+                    return res.status(400).json({
+                        success: false,
+                        message:
+                            "Please score every judging criterion."
+                    });
+                }
+
+                const criteriaMap = new Map(
+                    criteria.map(item => [
+                        Number(item.id),
+                        Number(item.maximum_score)
+                    ])
+                );
+
+                const submittedCriteria = new Set();
+
+                for (const item of scores) {
+                    const criterionId = Number(item.criterionId);
+                    const score = Number(item.score);
+
+                    if (
+                        !Number.isSafeInteger(criterionId) ||
+                        !criteriaMap.has(criterionId) ||
+                        !Number.isFinite(score) ||
+                        score < 0 ||
+                        score > criteriaMap.get(criterionId) ||
+                        submittedCriteria.has(criterionId)
+                    ) {
+                        await connection.rollback();
+
+                        return res.status(400).json({
+                            success: false,
+                            message:
+                                "One or more judging scores are invalid."
+                        });
+                    }
+
+                    submittedCriteria.add(criterionId);
+                }
+
+                for (const item of scores) {
+                    await connection.query(
+                        `INSERT INTO competition_scores_v2
+                            (submission_id, criterion_id,
+                             admin_id, score)
+                         VALUES (?, ?, ?, ?)
+                         ON DUPLICATE KEY UPDATE
+                            admin_id = VALUES(admin_id),
+                            score = VALUES(score),
+                            scored_at = CURRENT_TIMESTAMP`,
+                        [
+                            Number(submissionId),
+                            Number(item.criterionId),
+                            adminId,
+                            Number(item.score)
+                        ]
+                    );
+                }
+
+                const cleanFeedback =
+                    typeof feedback === "string"
+                        ? feedback.trim()
+                        : "";
+
+                if (cleanFeedback) {
+                    await connection.query(
+                        `INSERT INTO competition_feedback_v2
+                            (submission_id, admin_id, feedback)
+                         VALUES (?, ?, ?)`,
+                        [
+                            Number(submissionId),
+                            adminId,
+                            cleanFeedback
+                        ]
+                    );
+                }
+
+                await connection.commit();
+
+                res.json({
+                    success: true,
+                    message: "Judging scores and feedback saved successfully."
+                });
+
+            } catch (error) {
+                await connection.rollback();
+                throw error;
+
+            } finally {
+                connection.release();
+            }
+        })
+    );
+
+
+    // ============================================
+    // MARK SUBMISSION REVIEW AS COMPLETED
+    // ADMINISTRATORS ONLY
+    // ============================================
+
+    router.patch(
+        "/admin/submissions/:id/review/complete",
+        verifyToken,
+        verifyAdmin,
+        asyncHandler(async (req, res) => {
+            const submissionId = req.params.id;
+
+            if (!isValidId(submissionId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid submission ID."
+                });
+            }
+
+            const connection = await db.getConnection();
+
+            try {
+                await connection.beginTransaction();
+
+                const [submissions] = await connection.query(
+                    `SELECT s.id, s.competition_id,
+                            c.results_published
+                     FROM competition_submissions_v2 s
+                     JOIN competitions_v2 c
+                        ON c.id = s.competition_id
+                     WHERE s.id = ?
+                     FOR UPDATE`,
+                    [Number(submissionId)]
+                );
+
+                if (!submissions.length) {
+                    await connection.rollback();
+
+                    return res.status(404).json({
+                        success: false,
+                        message: "Submission not found."
+                    });
+                }
+
+                const submission = submissions[0];
+
+                if (Number(submission.results_published)) {
+                    await connection.rollback();
+
+                    return res.status(409).json({
+                        success: false,
+                        message:
+                            "Results have already been published."
+                    });
+                }
+
+                const [criteria] = await connection.query(
+                    `SELECT id
+                     FROM competition_criteria_v2
+                     WHERE competition_id = ?`,
+                    [submission.competition_id]
+                );
+
+                if (!criteria.length) {
+                    await connection.rollback();
+
+                    return res.status(400).json({
+                        success: false,
+                        message: "No judging criteria have been configured."
+                    });
+                }
+
+                const [scoreCounts] = await connection.query(
+                    `SELECT COUNT(DISTINCT sc.criterion_id) AS scored_count
+                     FROM competition_scores_v2 sc
+                     JOIN competition_criteria_v2 cr
+                        ON cr.id = sc.criterion_id
+                     WHERE sc.submission_id = ?
+                       AND cr.competition_id = ?`,
+                    [
+                        Number(submissionId),
+                        submission.competition_id
+                    ]
+                );
+
+                if (
+                    Number(scoreCounts[0].scored_count) !==
+                    criteria.length
+                ) {
+                    await connection.rollback();
+
+                    return res.status(400).json({
+                        success: false,
+                        message:
+                            "Save scores for every judging criterion before completing this review."
+                    });
+                }
+
+                await connection.query(
+                    `UPDATE competition_submissions_v2
+                     SET review_status = 'completed'
+                     WHERE id = ?`,
+                    [Number(submissionId)]
+                );
+
+                await connection.commit();
+
+                res.json({
+                    success: true,
+                    message: "Submission review marked as completed."
+                });
+
+            } catch (error) {
+                await connection.rollback();
+                throw error;
+
+            } finally {
+                connection.release();
+            }
+        })
+    );
+
+
     // ============================================
     // COMPETITION API CONNECTION TEST
     // ============================================

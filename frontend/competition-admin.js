@@ -14,6 +14,7 @@ const adminMessage = document.getElementById(
 
 let adminUser;
 let currentCompetitionId = null;
+let currentSubmissionId = null;
 try {
     adminUser = JSON.parse(adminStoredUser);
 } catch (error) {
@@ -344,10 +345,12 @@ function displayCompetitionSubmissions(submissions) {
                 videoPlayer.pause();
                 videoPlayer.src = data.videoUrl;
                 videoPlayer.load();
+               await loadSubmissionReview(submissionId);
 
                 details.textContent = `Reviewing submission #${submissionId}`;
 
-                reviewSection.style.display = "block";
+                reviewSection.hidden = false;
+reviewSection.style.display = "block";
 
                 reviewSection.scrollIntoView({
                     behavior: "smooth",
@@ -371,6 +374,282 @@ function displayCompetitionSubmissions(submissions) {
 
     });
 }
+
+
+
+/* =========================================
+   LOAD SUBMISSION REVIEW DATA
+========================================= */
+
+async function loadSubmissionReview(submissionId) {
+
+    const criteriaContainer = document.getElementById(
+        "scoringCriteria"
+    );
+
+    const feedbackField = document.getElementById(
+        "submissionFeedback"
+    );
+
+    const completeButton = document.getElementById(
+        "completeReviewButton"
+    );
+
+    currentSubmissionId = Number(submissionId);
+
+    criteriaContainer.textContent = "Loading judging criteria...";
+
+    feedbackField.value = "";
+
+    completeButton.disabled = true;
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/submissions/${currentSubmissionId}/review`
+        );
+
+        if (!data.success) {
+            throw new Error(
+                data.message || "Unable to load review information."
+            );
+        }
+
+        const criteria = data.criteria || [];
+        const scores = data.scores || [];
+
+        if (!criteria.length) {
+
+            criteriaContainer.innerHTML =
+                "<p>No judging criteria have been configured.</p>";
+
+            throw new Error(
+                "Please configure judging criteria before reviewing submissions."
+            );
+        }
+
+        const savedScores = new Map(
+            scores.map(item => [
+                Number(item.criterion_id),
+                item.score
+            ])
+        );
+
+        criteriaContainer.innerHTML = criteria.map(criterion => {
+
+            const criterionId = Number(criterion.id);
+            const maximumScore = Number(criterion.maximum_score);
+
+            const savedScore = savedScores.has(criterionId)
+                ? savedScores.get(criterionId)
+                : "";
+
+            return `
+                <div class="scoring-criterion">
+
+                    <label for="score-${criterionId}">
+                        <strong>
+                            ${escapeAdminHTML(criterion.criterion_name)}
+                        </strong>
+
+                        <span>
+                            Maximum score: ${escapeAdminHTML(maximumScore)}
+                        </span>
+                    </label>
+
+                    <p>
+                        ${escapeAdminHTML(criterion.description || "")}
+                    </p>
+
+                    <input
+                        type="number"
+                        id="score-${criterionId}"
+                        data-criterion-id="${criterionId}"
+                        min="0"
+                        max="${maximumScore}"
+                        step="0.01"
+                        value="${escapeAdminHTML(savedScore)}"
+                        placeholder="Enter score"
+                        required
+                    >
+
+                </div>
+            `;
+
+        }).join("");
+
+        feedbackField.value = data.feedback || "";
+
+        completeButton.disabled =
+            data.submission.review_status === "completed";
+
+        completeButton.textContent =
+            data.submission.review_status === "completed"
+                ? "Review Completed"
+                : "Mark Review as Completed";
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(
+            error.message || "Unable to load review information."
+        );
+
+        throw error;
+    }
+}
+
+/* =========================================
+   SAVE JUDGING SCORES AND FEEDBACK
+========================================= */
+
+const scoringForm = document.getElementById("scoringForm");
+
+scoringForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    if (!currentSubmissionId) {
+        showCompetitionAdminMessage(
+            "Please select a video submission first."
+        );
+        return;
+    }
+
+    const scoreInputs = document.querySelectorAll(
+        "#scoringCriteria [data-criterion-id]"
+    );
+
+    const scores = [];
+
+    for (const input of scoreInputs) {
+
+        const score = Number(input.value);
+        const maximumScore = Number(input.max);
+
+        if (
+            input.value.trim() === "" ||
+            !Number.isFinite(score) ||
+            score < 0 ||
+            score > maximumScore
+        ) {
+            showCompetitionAdminMessage(
+                "Please enter valid scores for every criterion."
+            );
+
+            input.focus();
+            return;
+        }
+
+        scores.push({
+            criterionId: Number(input.dataset.criterionId),
+            score
+        });
+    }
+
+    const feedback = document.getElementById(
+        "submissionFeedback"
+    ).value.trim();
+
+    const saveButton = scoringForm.querySelector(
+        'button[type="submit"]'
+    );
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/submissions/${currentSubmissionId}/review`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    scores,
+                    feedback
+                })
+            }
+        );
+
+        showCompetitionAdminMessage(
+            data.message || "Scores and feedback saved successfully."
+        );
+
+        await loadSubmissionReview(currentSubmissionId);
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(
+            error.message || "Unable to save judging scores."
+        );
+
+    } finally {
+
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Scores and Feedback";
+
+    }
+
+});
+
+
+/* =========================================
+   COMPLETE SUBMISSION REVIEW
+========================================= */
+
+const completeReviewButton = document.getElementById(
+    "completeReviewButton"
+);
+
+completeReviewButton.addEventListener("click", async function() {
+
+    if (!currentSubmissionId) {
+        showCompetitionAdminMessage(
+            "Please select a video submission first."
+        );
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to mark this review as completed?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    this.disabled = true;
+    this.textContent = "Completing...";
+
+    try {
+
+        const data = await competitionAdminFetch(
+            `/api/competition/admin/submissions/${currentSubmissionId}/review/complete`,
+            {
+                method: "PATCH"
+            }
+        );
+
+        showCompetitionAdminMessage(
+            data.message || "Review completed successfully."
+        );
+
+        await loadCompetitionAdminDashboard();
+
+        await loadSubmissionReview(currentSubmissionId);
+
+    } catch (error) {
+
+        showCompetitionAdminMessage(
+            error.message || "Unable to complete this review."
+        );
+
+        this.disabled = false;
+        this.textContent = "Mark Review as Completed";
+
+    }
+
+});
+
 
 /* =========================================
    CREATE COMPETITION
