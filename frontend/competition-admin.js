@@ -345,7 +345,6 @@ function displayCompetitionSubmissions(submissions) {
                 videoPlayer.pause();
                 videoPlayer.src = data.videoUrl;
                 videoPlayer.load();
-               await loadSubmissionReview(submissionId);
 
                 details.textContent = `Reviewing submission #${submissionId}`;
 
@@ -357,6 +356,9 @@ reviewSection.style.display = "block";
                     block: "start"
                 });
 
+           loadSubmissionReview(submissionId).catch(error => {
+    console.error("Unable to load submission review:", error);
+});
             } catch (error) {
 
                 showCompetitionAdminMessage(
