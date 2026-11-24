@@ -584,7 +584,38 @@ function resetCampaignTimer() {
 /* =========================================
    START SLIDER
 ========================================= */
+/* =========================================
+   START SLIDER
+========================================= */
 
 showCampaignSlide(0);
-
 startCampaignTimer();
+
+/* =========================================
+   PAUSE SLIDER ON HOVER
+========================================= */
+
+const campaignSlider = document.querySelector(".campaign-slider");
+
+if (campaignSlider) {
+
+    campaignSlider.addEventListener("mouseenter", function() {
+        clearInterval(campaignTimer);
+    });
+
+    campaignSlider.addEventListener("mouseleave", function() {
+        resetCampaignTimer();
+    });
+
+    /* Pause when the visitor switches browser tabs */
+    document.addEventListener("visibilitychange", function() {
+
+        if (document.hidden) {
+            clearInterval(campaignTimer);
+        } else {
+            resetCampaignTimer();
+        }
+
+    });
+
+}
