@@ -2,7 +2,7 @@
 /* =========================================
    COMPETITION ADMIN AUTHENTICATION
 ========================================= */
-
+console.log("COMPETITION ADMIN SCRIPT STARTED");
 const API_BASE_URL = window.location.origin;
 
 const adminToken = localStorage.getItem("slashTheHateToken");
@@ -601,7 +601,7 @@ scoringForm.addEventListener("submit", async function(event) {
 const completeReviewButton = document.getElementById(
     "completeReviewButton"
 );
-
+console.log("Completion button element:", completeReviewButton);
 completeReviewButton.addEventListener("click", async function() {
 showCompetitionAdminMessage("The completion button click is being detected.");
     if (!currentSubmissionId) {
