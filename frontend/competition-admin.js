@@ -603,7 +603,7 @@ const completeReviewButton = document.getElementById(
 );
 
 completeReviewButton.addEventListener("click", async function() {
-
+console.log("COMPLETE REVIEW BUTTON CLICKED");
     if (!currentSubmissionId) {
         showCompetitionAdminMessage(
             "Please select a video submission first."
