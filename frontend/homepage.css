@@ -9848,13 +9848,7 @@ body:has(.learn-hero).modal-open {
     box-shadow: 0 20px 55px rgba(0, 0, 0, 0.25);
 }
 
-.hero .campaign-art img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    max-height: 510px;
-    border-radius: 20px;
-    object-fit: cover;
+
 }
 
 /* Mobile layout */
@@ -9883,4 +9877,16 @@ body:has(.learn-hero).modal-open {
     .hero-content {
         padding: 22px 18px;
     }
+}
+.hero .campaign-art img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 360px;
+    aspect-ratio: auto;
+    border-radius: 20px;
+    object-fit: contain;
+    object-position: center;
+    background: #f8f6ed;
 }
