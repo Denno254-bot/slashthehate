@@ -658,7 +658,9 @@ section {
     gap: clamp(30px, 6vw, 75px);
 
     padding: 85px max(24px, calc((100% - var(--container)) / 2));
-    background: #f8f8eb;
+    background:
+    linear-gradient(rgba(5, 10, 20, 0.78), rgba(5, 10, 20, 0.82)),
+    url("images/font%20page/think%20before%20you%20post.png") center / cover no-repeat;
 }
 
 .tools-text h2 {
@@ -9889,4 +9891,679 @@ body:has(.learn-hero).modal-open {
     object-fit: contain;
     object-position: center;
     background: #f8f6ed;
+}
+
+
+/* =========================================
+   CAMPAIGN PROJECTS — FINAL DESIGN
+========================================= */
+.campaign-projects {
+    position: relative;
+    isolation: isolate;
+    padding: 110px 24px;
+    background:
+        radial-gradient(ellipse at 10% 20%, rgba(182, 5, 5, 0.10), transparent 40%),
+        linear-gradient(135deg, #f8f6ed 0%, #ffffff 50%, #f3eeee 100%);
+}
+
+.campaign-heading {
+    max-width: 760px;
+    margin: 0 auto 45px;
+    text-align: center;
+}
+
+.campaign-heading .small-heading {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #b60505;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.campaign-heading h2 {
+    margin: 0 0 22px;
+    color: #111827;
+    font-size: clamp(2.3rem, 5vw, 3.5rem);
+    line-height: 1.12;
+    font-weight: 900;
+    letter-spacing: -1.8px;
+    text-shadow: 0 4px 15px rgba(17, 24, 39, 0.08);
+}
+
+
+.campaign-heading > p:last-child {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #5b6472;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+.campaign-slider {
+    max-width: 1180px;
+    border: 2px solid rgba(182, 5, 5, 0.15);
+    border-radius: 32px;
+    background: #111827;
+    box-shadow:
+        0 35px 80px rgba(17, 24, 39, 0.22),
+        0 10px 30px rgba(182, 5, 5, 0.10);
+}
+
+
+
+.campaign-slide img {
+    display: block;
+    width: 100%;
+    height: clamp(360px, 52vw, 590px);
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1);
+    transition: transform 5.5s ease;
+}
+
+.campaign-slide.active img {
+    transform: scale(1.04);
+}
+
+.campaign-slide::after {
+    background: linear-gradient(
+        180deg,
+        rgba(10, 15, 25, 0.02) 15%,
+        rgba(10, 15, 25, 0.20) 45%,
+        rgba(10, 15, 25, 0.90) 100%
+    );
+}
+
+.campaign-caption {
+    padding: clamp(25px, 5vw, 55px);
+    padding-bottom: 75px;
+}
+
+.campaign-caption h3 {
+    max-width: 750px;
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 850;
+    line-height: 1.2;
+    letter-spacing: -0.7px;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+}
+
+
+
+.campaign-caption p {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.85;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+
+
+.campaign-prev,
+.campaign-next {
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.campaign-prev:hover,
+.campaign-next:hover {
+    background: #b60505;
+    border-color: #b60505;
+}
+
+.campaign-dots {
+    right: 35px;
+    bottom: 27px;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 30px;
+    background: rgba(10, 15, 25, 0.35);
+    backdrop-filter: blur(12px);
+}
+
+.campaign-dot.active {
+    width: 30px;
+    background: #ffffff;
+}
+
+.campaign-prev:focus-visible,
+.campaign-next:focus-visible,
+.campaign-dot:focus-visible {
+    outline: 3px solid #ff7777;
+    outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+    .campaign-projects {
+        padding: 65px 16px;
+    }
+
+    .campaign-heading {
+        margin-bottom: 30px;
+    }
+
+    .campaign-heading h2 {
+        font-size: clamp(1.8rem, 7vw, 2.3rem);
+        letter-spacing: -0.7px;
+    }
+
+    .campaign-heading > p:last-child {
+        font-size: 0.95rem;
+    }
+
+    .campaign-slider {
+        border-radius: 20px;
+    }
+
+    .campaign-slide img {
+        height: 440px;
+    }
+
+    .campaign-caption {
+        padding: 22px 22px 75px;
+    }
+
+    .campaign-caption h3 {
+        font-size: 1.55rem;
+    }
+
+    .campaign-caption p {
+        font-size: 0.88rem;
+        line-height: 1.65;
+    }
+
+    .campaign-prev,
+    .campaign-next {
+        width: 42px;
+        height: 42px;
+    }
+
+    .campaign-dots {
+        right: 50%;
+        bottom: 17px;
+        transform: translateX(50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .campaign-slide img {
+        transition: none;
+    }
+
+    .campaign-slide.active img {
+        transform: none;
+    }
+}
+
+
+/* =========================================
+   CAMPAIGN PROJECTS — PREMIUM DARK DESIGN
+========================================= */
+
+.campaign-projects {
+    position: relative;
+    isolation: isolate;
+    padding: 115px 24px !important;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 5% 15%, rgba(182, 5, 5, 0.22), transparent 38%),
+        radial-gradient(ellipse at 95% 85%, rgba(182, 5, 5, 0.12), transparent 35%),
+        linear-gradient(135deg, #080d18 0%, #111827 55%, #080d18 100%) !important;
+}
+
+.campaign-heading {
+    max-width: 1180px !important;
+    margin: 0 auto 45px !important;
+    text-align: left !important;
+}
+
+.campaign-heading .small-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #ff5555 !important;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+
+.campaign-heading .small-heading::before {
+    content: "";
+    width: 35px;
+    height: 3px;
+    background: #e50914;
+    border-radius: 5px;
+}
+
+.campaign-heading h2 {
+    max-width: 850px;
+    margin: 18px 0 !important;
+    color: #ffffff !important;
+    font-size: clamp(2.5rem, 5vw, 4.3rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.08 !important;
+    letter-spacing: -2px !important;
+}
+
+.campaign-heading > p:last-child {
+    max-width: 650px;
+    margin: 0 !important;
+    color: #b9c2d0 !important;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.campaign-slider {
+    max-width: 1180px !important;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 28px !important;
+    background: #080d18 !important;
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45) !important;
+}
+
+.campaign-slide img {
+    width: 100%;
+    height: clamp(400px, 55vw, 650px) !important;
+    object-fit: cover;
+    object-position: center;
+}
+
+.campaign-slide::after {
+    background: linear-gradient(
+        180deg,
+        rgba(5, 10, 20, 0.02) 20%,
+        rgba(5, 10, 20, 0.18) 45%,
+        rgba(5, 10, 20, 0.94) 100%
+    ) !important;
+}
+
+.campaign-caption {
+    padding: 45px 48px 85px !important;
+}
+
+.campaign-caption h3 {
+    max-width: 800px;
+    color: #ffffff !important;
+    font-size: clamp(2rem, 4vw, 3rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -1px;
+}
+
+.campaign-caption p {
+    max-width: 700px;
+    color: #e1e6ee !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+}
+
+.campaign-prev,
+.campaign-next {
+    width: 54px;
+    height: 54px;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(15px);
+    transition: 0.25s ease;
+}
+
+.campaign-prev:hover,
+.campaign-next:hover {
+    background: #b60505 !important;
+    border-color: #b60505 !important;
+    transform: scale(1.08);
+}
+
+.campaign-dots {
+    right: 35px;
+    bottom: 28px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 30px;
+    background: rgba(5, 10, 20, 0.65);
+    backdrop-filter: blur(12px);
+}
+
+.campaign-dot.active {
+    width: 30px;
+    background: #ff5555 !important;
+}
+
+@media (max-width: 700px) {
+    .campaign-projects {
+        padding: 75px 16px !important;
+    }
+
+    .campaign-heading {
+        margin-bottom: 30px !important;
+    }
+
+    .campaign-heading h2 {
+        font-size: clamp(2rem, 8vw, 2.8rem) !important;
+        letter-spacing: -1px !important;
+    }
+
+    .campaign-slider {
+        border-radius: 20px !important;
+    }
+
+    .campaign-slide img {
+        height: 440px !important;
+    }
+
+    .campaign-caption {
+        padding: 25px 22px 80px !important;
+    }
+
+    .campaign-caption h3 {
+        font-size: 1.8rem !important;
+    }
+
+    .campaign-caption p {
+        font-size: 0.92rem !important;
+    }
+
+    .campaign-prev,
+    .campaign-next {
+        width: 42px;
+        height: 42px;
+    }
+
+    .campaign-dots {
+        right: 50%;
+        bottom: 17px;
+        transform: translateX(50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .campaign-slide img,
+    .campaign-prev,
+    .campaign-next {
+        transition: none !important;
+    }
+}
+
+
+
+
+/* =========================================
+   WHY IT MATTERS — GLASS DESIGN
+========================================= */
+
+.why-section {
+    position: relative;
+    isolation: isolate;
+    padding: 100px 24px;
+    background:
+        linear-gradient(rgba(5, 10, 20, 0.78), rgba(5, 10, 20, 0.82)),
+        url("images/font%20page/why.png") center / cover no-repeat;
+}
+
+.why-section .section-heading h2 {
+    color: #ffffff;
+}
+
+.why-section .section-heading h2 span {
+    color: #ff5555;
+}
+
+.why-section .section-heading p {
+    color: #c1cad8;
+}
+
+.why-section .section-heading .small-heading {
+    color: #ff5555;
+}
+
+.why-section .impact-card {
+    position: relative;
+    overflow: hidden;
+    padding: 30px !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.35s ease,
+                background 0.35s ease,
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+}
+
+.why-section .impact-card:hover {
+    transform: translateY(-7px);
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 85, 85, 0.55) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+.why-section .impact-card .number {
+    color: #ff5555;
+    font-weight: 900;
+}
+
+.why-section .impact-card h3 {
+    color: #ffffff !important;
+    font-weight: 800;
+}
+
+.why-section .impact-card p {
+    color: #c1cad8 !important;
+    line-height: 1.8;
+}
+
+/* Scroll reveal — activated by JavaScript */
+.why-section.reveal-ready .impact-card {
+    opacity: 0;
+    transform: translateY(35px);
+}
+
+.why-section .impact-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.why-section .impact-card {
+    transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .why-section .impact-card {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+   }
+}
+
+/* =========================================
+   THINK BEFORE YOU POST — BACKGROUND CONTRAST
+========================================= */
+
+.tools-section .tools-text h2 {
+    color: #ffffff;
+}
+
+.tools-section .tools-text h2 span {
+    color: #ff6666;
+}
+
+.tools-section .tools-text .small-heading {
+    color: #ff7777;
+}
+
+.tools-section .tools-text > p:not(.small-heading) {
+    color: #e1e6ee;
+}
+
+.tools-section .text-link {
+    color: #ff7777;
+}
+
+.tools-section .text-link:hover {
+    color: #ffffff;
+}
+
+
+/* =========================================
+   CTA — PREMIUM CAMPAIGN DESIGN
+========================================= */
+
+.cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background:
+        radial-gradient(circle at 85% 20%, rgba(255, 70, 70, 0.22), transparent 38%),
+        linear-gradient(135deg, #080d18, #172235 60%, #080d18);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.22);
+}
+
+.cta h2 {
+    color: #ffffff;
+}
+
+.cta h2 span {
+    color: #ff6666;
+}
+
+.cta .small-heading {
+    color: #ff7777;
+}
+
+.cta-content > p:last-child {
+    color: #d0d8e4;
+}
+
+.cta-button {
+    background: #ff5555;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(255, 85, 85, 0.2);
+}
+
+.cta-button:hover {
+    background: #d93636;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   QUICK FEATURES — GLASS CARDS
+========================================= */
+
+.quick-features {
+    position: relative;
+}
+
+.quick-features .feature {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(17, 24, 39, 0.94);
+    color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.quick-features .feature:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255, 85, 85, 0.65);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2);
+}
+
+.quick-features .feature h3 {
+    color: #ffffff;
+}
+
+.quick-features .feature p {
+    color: #c1cad8;
+}
+
+
+/* =========================================
+   NATIONAL COMPETITION HERO BUTTON
+========================================= */
+
+.national-competition-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ff4141, #bd101f);
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(220, 25, 40, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.national-competition-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 35px rgba(220, 25, 40, 0.45);
+    color: #ffffff;
+}
+
+.competition-sticker {
+    font-size: 30px;
+}
+
+.competition-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.competition-btn-text strong {
+    font-size: 13px;
+    letter-spacing: 0.7px;
+}
+
+.competition-btn-text small {
+    font-size: 12px;
+    color: #ffe1e1;
+}
+
+.competition-arrow {
+    font-size: 25px;
+    margin-left: 5px;
+}
+
+.national-competition-btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+}
+
+@media (max-width: 480px) {
+    .national-competition-btn {
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    .competition-btn-text strong {
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .national-competition-btn {
+        transition: none;
+    }
 }
