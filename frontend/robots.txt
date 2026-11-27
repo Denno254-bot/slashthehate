@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+Disallow: /competition-admin.html
+Disallow: /dashboard.html
+Disallow: /login.html
+Disallow: /register.html
+
+Sitemap: https://slashthehate.com/sitemap.xml
